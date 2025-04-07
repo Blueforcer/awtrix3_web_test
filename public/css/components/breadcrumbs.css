@@ -1,0 +1,158 @@
+/* Breadcrumbs Container */
+.breadcrumbs {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 0.5rem 0;
+    margin-bottom: 1rem;
+}
+
+/* Breadcrumb Item */
+.breadcrumb-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+/* Breadcrumb Link */
+.breadcrumb-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.breadcrumb-link:hover {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+/* Aktiver Breadcrumb */
+.breadcrumb-item.active {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+/* Separator */
+.breadcrumb-separator {
+    display: flex;
+    align-items: center;
+    margin: 0 0.5rem;
+    color: var(--text-secondary);
+}
+
+.breadcrumb-separator i {
+    font-size: 0.75rem;
+}
+
+/* Breadcrumbs mit Icons */
+.breadcrumb-icon {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.breadcrumb-icon i {
+    font-size: 1rem;
+    color: var(--text-secondary);
+}
+
+/* Breadcrumbs Varianten */
+.breadcrumbs-primary .breadcrumb-link:hover {
+    color: var(--primary);
+}
+
+.breadcrumbs-success .breadcrumb-link:hover {
+    color: var(--success);
+}
+
+.breadcrumbs-danger .breadcrumb-link:hover {
+    color: var(--error);
+}
+
+.breadcrumbs-warning .breadcrumb-link:hover {
+    color: var(--warning);
+}
+
+.breadcrumbs-info .breadcrumb-link:hover {
+    color: var(--info);
+}
+
+/* Breadcrumbs mit Hintergrund */
+.breadcrumbs-bg {
+    background-color: var(--bg-secondary);
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+}
+
+/* Breadcrumbs mit Rahmen */
+.breadcrumbs-bordered {
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 0.75rem 1rem;
+}
+
+/* Breadcrumbs mit Schatten */
+.breadcrumbs-shadow {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    background-color: white;
+}
+
+/* Breadcrumbs mit Animation */
+.breadcrumb-link {
+    position: relative;
+}
+
+.breadcrumb-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: currentColor;
+    transition: width 0.2s ease;
+}
+
+.breadcrumb-link:hover::after {
+    width: 100%;
+}
+
+/* Breadcrumbs mit Badges */
+.breadcrumb-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.5rem;
+    height: 1.5rem;
+    padding: 0 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: white;
+    background-color: var(--primary);
+    border-radius: 1rem;
+    margin-left: 0.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .breadcrumbs {
+        font-size: 0.75rem;
+    }
+    
+    .breadcrumb-separator {
+        margin: 0 0.25rem;
+    }
+    
+    .breadcrumb-icon i {
+        font-size: 0.875rem;
+    }
+    
+    .breadcrumbs-bg,
+    .breadcrumbs-bordered,
+    .breadcrumbs-shadow {
+        padding: 0.5rem 0.75rem;
+    }
+} 

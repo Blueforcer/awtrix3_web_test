@@ -1,0 +1,218 @@
+/* Card Basis */
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: var(--card-bg);
+    background-clip: border-box;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.2s;
+}
+
+.card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Card Header */
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    margin-bottom: 0;
+    background-color: transparent;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.card-header:first-child {
+    border-radius: calc(8px - 1px) calc(8px - 1px) 0 0;
+}
+
+.card-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.card-subtitle {
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+/* Card Body */
+.card-body {
+    flex: 1 1 auto;
+    padding: 1.5rem;
+}
+
+/* Card Footer */
+.card-footer {
+    padding: 1rem 1.5rem;
+    background-color: transparent;
+    border-top: 1px solid var(--border-color);
+}
+
+.card-footer:last-child {
+    border-radius: 0 0 calc(8px - 1px) calc(8px - 1px);
+}
+
+/* Card Varianten */
+.card-primary {
+    border-color: var(--primary);
+}
+
+.card-primary .card-header {
+    background-color: var(--primary);
+    color: white;
+}
+
+.card-success {
+    border-color: var(--success);
+}
+
+.card-success .card-header {
+    background-color: var(--success);
+    color: white;
+}
+
+.card-danger {
+    border-color: var(--error);
+}
+
+.card-danger .card-header {
+    background-color: var(--error);
+    color: white;
+}
+
+.card-warning {
+    border-color: var(--warning);
+}
+
+.card-warning .card-header {
+    background-color: var(--warning);
+    color: white;
+}
+
+.card-info {
+    border-color: var(--info);
+}
+
+.card-info .card-header {
+    background-color: var(--info);
+    color: white;
+}
+
+/* Card Grid */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 1.5rem;
+}
+
+/* Card List */
+.card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+}
+
+/* Card Actions */
+.card-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Card Loading State */
+.card-loading {
+    position: relative;
+    min-height: 200px;
+}
+
+.card-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2rem;
+    height: 2rem;
+    margin: -1rem 0 0 -1rem;
+    border: 0.25rem solid var(--border-color);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: card-loading 0.75s linear infinite;
+}
+
+@keyframes card-loading {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Card Empty State */
+.card-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.card-empty i {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+/* Card Error State */
+.card-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+    color: var(--error);
+}
+
+.card-error i {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .card-header {
+        padding: 1rem;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .card-footer {
+        padding: 1rem;
+    }
+    
+    .card-grid {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+    }
+    
+    .card-list {
+        padding: 1rem;
+    }
+} 

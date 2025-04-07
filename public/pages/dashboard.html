@@ -1,0 +1,105 @@
+<div class="dashboard">
+    <h1 class="page-title">Dashboard</h1>
+    
+    <div class="dashboard-grid">
+        <!-- System Status Card -->
+        <div class="card system-status">
+            <h2>System Status</h2>
+            <div class="status-grid">
+                <div class="status-item">
+                    <i class="fa-solid fa-microchip"></i>
+                    <div class="status-info">
+                        <span class="status-label">CPU</span>
+                        <span class="status-value" id="cpu-usage">--</span>
+                    </div>
+                </div>
+                <div class="status-item">
+                    <i class="fa-solid fa-memory"></i>
+                    <div class="status-info">
+                        <span class="status-label">Speicher</span>
+                        <span class="status-value" id="memory-usage">--</span>
+                    </div>
+                </div>
+                <div class="status-item">
+                    <i class="fa-solid fa-temperature-high"></i>
+                    <div class="status-info">
+                        <span class="status-label">Temperatur</span>
+                        <span class="status-value" id="temperature">--</span>
+                    </div>
+                </div>
+                <div class="status-item">
+                    <i class="fa-solid fa-clock"></i>
+                    <div class="status-info">
+                        <span class="status-label">Uptime</span>
+                        <span class="status-value" id="uptime">--</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Network Status Card -->
+        <div class="card network-status">
+            <h2>Netzwerk Status</h2>
+            <div class="status-grid">
+                <div class="status-item">
+                    <i class="fa-solid fa-wifi"></i>
+                    <div class="status-info">
+                        <span class="status-label">WLAN</span>
+                        <span class="status-value" id="wifi-status">--</span>
+                    </div>
+                </div>
+                <div class="status-item">
+                    <i class="fa-solid fa-signal"></i>
+                    <div class="status-info">
+                        <span class="status-label">Signalstärke</span>
+                        <span class="status-value" id="signal-strength">--</span>
+                    </div>
+                </div>
+                <div class="status-item">
+                    <i class="fa-solid fa-network-wired"></i>
+                    <div class="status-info">
+                        <span class="status-label">IP-Adresse</span>
+                        <span class="status-value" id="ip-address">--</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Actions Card -->
+        <div class="card quick-actions">
+            <h2>Schnellaktionen</h2>
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="restart-btn">
+                    <i class="fa-solid fa-power-off"></i>
+                    Neustarten
+                </button>
+                <button class="btn btn-secondary" id="update-btn">
+                    <i class="fa-solid fa-arrow-up"></i>
+                    Update prüfen
+                </button>
+                <button class="btn btn-secondary" id="backup-btn">
+                    <i class="fa-solid fa-download"></i>
+                    Backup erstellen
+                </button>
+            </div>
+        </div>
+        
+        <!-- System Log Card -->
+        <div class="card system-log">
+            <h2>System Log</h2>
+            <div class="log-container">
+                <pre id="log-content">Lade Logs...</pre>
+            </div>
+            <div class="log-actions">
+                <button class="btn btn-secondary" id="refresh-log-btn">
+                    <i class="fa-solid fa-sync"></i>
+                    Aktualisieren
+                </button>
+                <button class="btn btn-secondary" id="download-log-btn">
+                    <i class="fa-solid fa-download"></i>
+                    Herunterladen
+                </button>
+            </div>
+        </div>
+    </div>
+</div> 

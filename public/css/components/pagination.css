@@ -1,0 +1,166 @@
+/* Pagination Container */
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    margin: 1rem 0;
+}
+
+/* Pagination Item */
+.pagination-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.5rem;
+    height: 2.5rem;
+    padding: 0 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pagination-item:hover {
+    background-color: var(--bg-hover);
+    border-color: var(--border-hover);
+}
+
+/* Aktiver Pagination Item */
+.pagination-item.active {
+    color: white;
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+/* Deaktivierter Pagination Item */
+.pagination-item.disabled {
+    color: var(--text-disabled);
+    background-color: var(--bg-disabled);
+    border-color: var(--border-color);
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Pagination mit Icons */
+.pagination-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pagination-icon i {
+    font-size: 1rem;
+}
+
+/* Pagination Varianten */
+.pagination-primary .pagination-item.active {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.pagination-success .pagination-item.active {
+    background-color: var(--success);
+    border-color: var(--success);
+}
+
+.pagination-danger .pagination-item.active {
+    background-color: var(--error);
+    border-color: var(--error);
+}
+
+.pagination-warning .pagination-item.active {
+    background-color: var(--warning);
+    border-color: var(--warning);
+}
+
+.pagination-info .pagination-item.active {
+    background-color: var(--info);
+    border-color: var(--info);
+}
+
+/* Pagination mit Runden Ecken */
+.pagination-rounded .pagination-item {
+    border-radius: 2rem;
+}
+
+/* Pagination mit Schatten */
+.pagination-shadow .pagination-item {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: none;
+}
+
+.pagination-shadow .pagination-item:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Pagination mit Animation */
+.pagination-item {
+    position: relative;
+    overflow: hidden;
+}
+
+.pagination-item::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s ease, height 0.3s ease;
+}
+
+.pagination-item:active::after {
+    width: 200%;
+    height: 200%;
+}
+
+/* Pagination mit Größen */
+.pagination-sm .pagination-item {
+    min-width: 2rem;
+    height: 2rem;
+    font-size: 0.75rem;
+}
+
+.pagination-lg .pagination-item {
+    min-width: 3rem;
+    height: 3rem;
+    font-size: 1rem;
+}
+
+/* Pagination mit Text */
+.pagination-text {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 1rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .pagination {
+        flex-wrap: wrap;
+    }
+    
+    .pagination-item {
+        min-width: 2rem;
+        height: 2rem;
+        font-size: 0.75rem;
+        padding: 0 0.25rem;
+    }
+    
+    .pagination-text {
+        width: 100%;
+        justify-content: center;
+        margin: 0.5rem 0;
+    }
+} 

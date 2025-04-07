@@ -1,0 +1,223 @@
+/* Dropdown Container */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown Toggle */
+.dropdown-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.dropdown-toggle:hover {
+    background-color: var(--bg-hover);
+    border-color: var(--border-hover);
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 200px;
+    padding: 0.5rem 0;
+    margin-top: 0.25rem;
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.2s ease;
+    z-index: 1000;
+}
+
+.dropdown.show .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Dropdown Item */
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background-color: var(--bg-hover);
+    color: var(--primary);
+}
+
+/* Dropdown Divider */
+.dropdown-divider {
+    height: 1px;
+    margin: 0.5rem 0;
+    background-color: var(--border-color);
+}
+
+/* Dropdown Header */
+.dropdown-header {
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Dropdown Varianten */
+.dropdown-primary .dropdown-toggle {
+    color: white;
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.dropdown-primary .dropdown-toggle:hover {
+    background-color: var(--primary-dark);
+}
+
+.dropdown-success .dropdown-toggle {
+    color: white;
+    background-color: var(--success);
+    border-color: var(--success);
+}
+
+.dropdown-success .dropdown-toggle:hover {
+    background-color: var(--success-dark);
+}
+
+.dropdown-danger .dropdown-toggle {
+    color: white;
+    background-color: var(--error);
+    border-color: var(--error);
+}
+
+.dropdown-danger .dropdown-toggle:hover {
+    background-color: var(--error-dark);
+}
+
+.dropdown-warning .dropdown-toggle {
+    color: white;
+    background-color: var(--warning);
+    border-color: var(--warning);
+}
+
+.dropdown-warning .dropdown-toggle:hover {
+    background-color: var(--warning-dark);
+}
+
+.dropdown-info .dropdown-toggle {
+    color: white;
+    background-color: var(--info);
+    border-color: var(--info);
+}
+
+.dropdown-info .dropdown-toggle:hover {
+    background-color: var(--info-dark);
+}
+
+/* Dropdown mit Icons */
+.dropdown-icon {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.dropdown-icon i {
+    font-size: 1rem;
+    color: var(--text-secondary);
+}
+
+/* Dropdown mit Badges */
+.dropdown-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.5rem;
+    height: 1.5rem;
+    padding: 0 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: white;
+    background-color: var(--primary);
+    border-radius: 1rem;
+    margin-left: 0.5rem;
+}
+
+/* Dropdown Positionen */
+.dropdown-menu-right {
+    left: auto;
+    right: 0;
+}
+
+.dropdown-menu-up {
+    top: auto;
+    bottom: 100%;
+    margin-top: 0;
+    margin-bottom: 0.25rem;
+}
+
+/* Dropdown mit Animation */
+.dropdown-menu {
+    transform-origin: top left;
+}
+
+.dropdown-menu-right {
+    transform-origin: top right;
+}
+
+.dropdown-menu-up {
+    transform-origin: bottom left;
+}
+
+.dropdown-menu-up.dropdown-menu-right {
+    transform-origin: bottom right;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .dropdown-menu {
+        position: fixed;
+        top: auto;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        margin: 0;
+        border-radius: 0;
+        transform: translateY(100%);
+    }
+    
+    .dropdown.show .dropdown-menu {
+        transform: translateY(0);
+    }
+    
+    .dropdown-toggle {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.75rem;
+    }
+    
+    .dropdown-item {
+        padding: 0.75rem 1rem;
+    }
+} 

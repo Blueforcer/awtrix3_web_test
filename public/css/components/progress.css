@@ -1,0 +1,194 @@
+/* Progress Container */
+.progress {
+    display: flex;
+    height: 1rem;
+    overflow: hidden;
+    background-color: var(--bg-secondary);
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+/* Progress Bar */
+.progress-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+    white-space: nowrap;
+    background-color: var(--primary);
+    transition: width 0.3s ease;
+}
+
+/* Progress Varianten */
+.progress-primary .progress-bar {
+    background-color: var(--primary);
+}
+
+.progress-success .progress-bar {
+    background-color: var(--success);
+}
+
+.progress-danger .progress-bar {
+    background-color: var(--error);
+}
+
+.progress-warning .progress-bar {
+    background-color: var(--warning);
+}
+
+.progress-info .progress-bar {
+    background-color: var(--info);
+}
+
+/* Progress Striped */
+.progress-striped .progress-bar {
+    background-image: linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0.15) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255, 255, 255, 0.15) 50%,
+        rgba(255, 255, 255, 0.15) 75%,
+        transparent 75%,
+        transparent
+    );
+    background-size: 1rem 1rem;
+}
+
+/* Progress Animated */
+.progress-animated .progress-bar {
+    animation: progress-stripes 1s linear infinite;
+}
+
+@keyframes progress-stripes {
+    from {
+        background-position: 1rem 0;
+    }
+    to {
+        background-position: 0 0;
+    }
+}
+
+/* Progress Label */
+.progress-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.progress-label-text {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.progress-label-value {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+/* Progress Sizes */
+.progress-sm {
+    height: 0.5rem;
+}
+
+.progress-lg {
+    height: 1.5rem;
+}
+
+/* Progress Stack */
+.progress-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* Progress Group */
+.progress-group {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Progress mit Text */
+.progress-text {
+    position: relative;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Progress mit Icon */
+.progress-icon {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.progress-icon i {
+    font-size: 1rem;
+    color: var(--text-secondary);
+}
+
+/* Progress mit Tooltip */
+.progress-tooltip {
+    position: relative;
+}
+
+.progress-tooltip:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 4px;
+    white-space: nowrap;
+    margin-bottom: 0.5rem;
+}
+
+/* Progress mit Steps */
+.progress-steps {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.progress-step {
+    flex: 1;
+    height: 0.25rem;
+    background-color: var(--bg-secondary);
+    border-radius: 2px;
+}
+
+.progress-step.active {
+    background-color: var(--primary);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .progress {
+        height: 0.75rem;
+    }
+    
+    .progress-sm {
+        height: 0.375rem;
+    }
+    
+    .progress-lg {
+        height: 1.25rem;
+    }
+    
+    .progress-label {
+        font-size: 0.75rem;
+    }
+    
+    .progress-text {
+        font-size: 0.625rem;
+    }
+} 

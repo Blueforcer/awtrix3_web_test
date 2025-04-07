@@ -1,0 +1,214 @@
+/* Modal Container */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.modal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Modal Dialog */
+.modal-dialog {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin: 1rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(-20px);
+    transition: transform 0.3s ease;
+}
+
+.modal.show .modal-dialog {
+    transform: translateY(0);
+}
+
+/* Modal Header */
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    background: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+    color: var(--text-primary);
+    background-color: var(--bg-hover);
+}
+
+/* Modal Body */
+.modal-body {
+    padding: 1rem;
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+}
+
+/* Modal Footer */
+.modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Modal Größen */
+.modal-sm .modal-dialog {
+    max-width: 300px;
+}
+
+.modal-lg .modal-dialog {
+    max-width: 800px;
+}
+
+.modal-xl .modal-dialog {
+    max-width: 1140px;
+}
+
+/* Modal Varianten */
+.modal-primary .modal-header {
+    background-color: var(--primary);
+    color: white;
+}
+
+.modal-primary .modal-title,
+.modal-primary .modal-close {
+    color: white;
+}
+
+.modal-success .modal-header {
+    background-color: var(--success);
+    color: white;
+}
+
+.modal-success .modal-title,
+.modal-success .modal-close {
+    color: white;
+}
+
+.modal-danger .modal-header {
+    background-color: var(--error);
+    color: white;
+}
+
+.modal-danger .modal-title,
+.modal-danger .modal-close {
+    color: white;
+}
+
+.modal-warning .modal-header {
+    background-color: var(--warning);
+    color: white;
+}
+
+.modal-warning .modal-title,
+.modal-warning .modal-close {
+    color: white;
+}
+
+.modal-info .modal-header {
+    background-color: var(--info);
+    color: white;
+}
+
+.modal-info .modal-title,
+.modal-info .modal-close {
+    color: white;
+}
+
+/* Modal mit Animation */
+.modal-fade .modal-dialog {
+    transform: scale(0.8);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.modal.show .modal-fade .modal-dialog {
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* Modal mit Backdrop */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal.show .modal-backdrop {
+    opacity: 1;
+}
+
+/* Modal mit Scroll Lock */
+.modal-open {
+    overflow: hidden;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .modal-dialog {
+        margin: 0;
+        max-height: 100vh;
+        border-radius: 0;
+    }
+    
+    .modal-header {
+        padding: 0.75rem;
+    }
+    
+    .modal-body {
+        padding: 0.75rem;
+    }
+    
+    .modal-footer {
+        padding: 0.75rem;
+    }
+    
+    .modal-title {
+        font-size: 1.125rem;
+    }
+} 

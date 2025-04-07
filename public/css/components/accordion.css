@@ -1,0 +1,172 @@
+/* Accordion Container */
+.accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+/* Accordion Item */
+.accordion-item {
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+/* Accordion Header */
+.accordion-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    background-color: var(--bg-secondary);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.accordion-header:hover {
+    background-color: var(--bg-hover);
+}
+
+/* Accordion Title */
+.accordion-title {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+/* Accordion Icon */
+.accordion-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    transition: transform 0.2s ease;
+}
+
+.accordion-icon i {
+    font-size: 1rem;
+    color: var(--text-secondary);
+}
+
+.accordion-item.active .accordion-icon {
+    transform: rotate(180deg);
+}
+
+/* Accordion Content */
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.accordion-body {
+    padding: 1rem;
+    background-color: white;
+}
+
+/* Accordion Varianten */
+.accordion-primary .accordion-header {
+    background-color: var(--primary-light);
+    color: var(--primary);
+}
+
+.accordion-success .accordion-header {
+    background-color: var(--success-light);
+    color: var(--success);
+}
+
+.accordion-danger .accordion-header {
+    background-color: var(--error-light);
+    color: var(--error);
+}
+
+.accordion-warning .accordion-header {
+    background-color: var(--warning-light);
+    color: var(--warning);
+}
+
+.accordion-info .accordion-header {
+    background-color: var(--info-light);
+    color: var(--info);
+}
+
+/* Accordion mit Icons */
+.accordion-icon-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.accordion-icon-left i {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+}
+
+/* Accordion mit Badges */
+.accordion-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.5rem;
+    height: 1.5rem;
+    padding: 0 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: white;
+    background-color: var(--primary);
+    border-radius: 1rem;
+    margin-left: 0.5rem;
+}
+
+/* Accordion mit Animation */
+.accordion-fade .accordion-content {
+    opacity: 0;
+    transition: opacity 0.3s ease, max-height 0.3s ease;
+}
+
+.accordion-item.active .accordion-fade .accordion-content {
+    opacity: 1;
+}
+
+/* Accordion mit Schatten */
+.accordion-shadow .accordion-item {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.2s ease;
+}
+
+.accordion-shadow .accordion-item:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Accordion mit Rahmen */
+.accordion-bordered .accordion-item {
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.accordion-bordered .accordion-item:first-child {
+    border-top: 1px solid var(--border-color);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .accordion-header {
+        padding: 0.75rem;
+    }
+    
+    .accordion-title {
+        font-size: 0.875rem;
+    }
+    
+    .accordion-body {
+        padding: 0.75rem;
+    }
+    
+    .accordion-icon-left i {
+        font-size: 1rem;
+    }
+} 

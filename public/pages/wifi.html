@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WLAN-Konfiguration - AWTRIX3</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/pages/wifi.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-left">
+                <h1>WLAN-Konfiguration</h1>
+            </div>
+            <div class="header-right">
+                <button id="theme-toggle" class="btn btn-icon">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="app-content">
+            <!-- WLAN Status -->
+            <div class="wifi-status-card">
+                <div class="wifi-status-header">
+                    <h2 class="wifi-status-title">WLAN-Status</h2>
+                    <button id="refresh-status-btn" class="btn btn-icon">
+                        <i class="fa-solid fa-rotate"></i>
+                    </button>
+                </div>
+                <div class="wifi-status-grid">
+                    <div class="wifi-status-item">
+                        <span class="wifi-status-label">Verbindungsstatus</span>
+                        <span id="wifi-connection-status" class="wifi-status-value">--</span>
+                    </div>
+                    <div class="wifi-status-item">
+                        <span class="wifi-status-label">SSID</span>
+                        <span id="wifi-ssid" class="wifi-status-value">--</span>
+                    </div>
+                    <div class="wifi-status-item">
+                        <span class="wifi-status-label">Signalstärke</span>
+                        <span id="wifi-signal" class="wifi-status-value">--</span>
+                    </div>
+                    <div class="wifi-status-item">
+                        <span class="wifi-status-label">IP-Adresse</span>
+                        <span id="wifi-ip" class="wifi-status-value">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WLAN Liste -->
+            <div class="wifi-list-card">
+                <div class="wifi-list-header">
+                    <h2 class="wifi-list-title">Verfügbare Netzwerke</h2>
+                    <button id="scan-wifi-btn" class="btn btn-primary">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        Netzwerke scannen
+                    </button>
+                </div>
+                <div id="wifi-networks" class="wifi-list">
+                    <!-- Wird durch JavaScript gefüllt -->
+                </div>
+            </div>
+
+            <!-- WLAN Verbindungsformular -->
+            <div class="wifi-connect">
+                <h2 class="wifi-connect-title">Mit WLAN verbinden</h2>
+                <form id="wifi-connect-form" class="wifi-connect-form">
+                    <div class="form-group">
+                        <label for="wifi-ssid-input" class="form-label">Netzwerkname (SSID)</label>
+                        <input type="text" id="wifi-ssid-input" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="wifi-password" class="form-label">Passwort</label>
+                        <div class="password-input-group">
+                            <input type="password" id="wifi-password" class="form-input" required>
+                            <button type="button" id="password-toggle" class="password-toggle">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Sicherheit</label>
+                        <div class="security-options">
+                            <label class="security-option">
+                                <input type="radio" name="security" value="none" id="security-none">
+                                <span>Keine</span>
+                            </label>
+                            <label class="security-option">
+                                <input type="radio" name="security" value="WEP" id="security-wep">
+                                <span>WEP</span>
+                            </label>
+                            <label class="security-option">
+                                <input type="radio" name="security" value="WPA" id="security-wpa" checked>
+                                <span>WPA/WPA2</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa-solid fa-plug"></i>
+                            Verbinden
+                        </button>
+                        <button type="button" id="disconnect-wifi-btn" class="btn btn-danger">
+                            <i class="fa-solid fa-plug-slash"></i>
+                            Verbindung trennen
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="../js/modules/api.js"></script>
+    <script type="module" src="../js/modules/ui.js"></script>
+    <script type="module" src="../js/pages/wifi.js"></script>
+</body>
+</html> 

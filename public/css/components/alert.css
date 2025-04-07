@@ -1,0 +1,186 @@
+/* Alert Container */
+.alert {
+    position: relative;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+/* Alert Icon */
+.alert-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 1.25rem;
+}
+
+/* Alert Content */
+.alert-content {
+    flex: 1;
+}
+
+/* Alert Title */
+.alert-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 0.25rem;
+}
+
+/* Alert Message */
+.alert-message {
+    font-size: 0.875rem;
+    margin: 0;
+}
+
+/* Alert Close Button */
+.alert-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0;
+    font-size: 1.25rem;
+    color: inherit;
+    background: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
+}
+
+.alert-close:hover {
+    opacity: 1;
+}
+
+/* Alert Varianten */
+.alert-primary {
+    color: var(--primary-dark);
+    background-color: var(--primary-light);
+    border-color: var(--primary);
+}
+
+.alert-success {
+    color: var(--success-dark);
+    background-color: var(--success-light);
+    border-color: var(--success);
+}
+
+.alert-danger {
+    color: var(--error-dark);
+    background-color: var(--error-light);
+    border-color: var(--error);
+}
+
+.alert-warning {
+    color: var(--warning-dark);
+    background-color: var(--warning-light);
+    border-color: var(--warning);
+}
+
+.alert-info {
+    color: var(--info-dark);
+    background-color: var(--info-light);
+    border-color: var(--info);
+}
+
+/* Alert mit Animation */
+.alert-fade {
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.alert.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Alert mit Icon */
+.alert-icon-left {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.alert-icon-right {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    flex-direction: row-reverse;
+}
+
+/* Alert mit Link */
+.alert-link {
+    color: inherit;
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+.alert-link:hover {
+    text-decoration: none;
+}
+
+/* Alert mit Dismiss */
+.alert-dismissible {
+    padding-right: 3rem;
+}
+
+.alert-dismissible .alert-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 1rem;
+}
+
+/* Alert mit Border */
+.alert-bordered {
+    border-width: 2px;
+}
+
+/* Alert mit Schatten */
+.alert-shadow {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Alert mit Gradient */
+.alert-gradient {
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+    background-size: 1rem 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .alert {
+        padding: 0.75rem;
+    }
+    
+    .alert-title {
+        font-size: 0.875rem;
+    }
+    
+    .alert-message {
+        font-size: 0.75rem;
+    }
+    
+    .alert-icon {
+        width: 1.25rem;
+        height: 1.25rem;
+        font-size: 1rem;
+    }
+    
+    .alert-dismissible {
+        padding-right: 2.5rem;
+    }
+    
+    .alert-dismissible .alert-close {
+        padding: 0.75rem;
+    }
+} 
