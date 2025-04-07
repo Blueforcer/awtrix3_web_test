@@ -1,282 +1,601 @@
-import { GIFEncoder, quantize, applyPalette } from 'https://unpkg.com/gifenc@1.0.3';
-import { getBaseUrl, proxyFetch, BASE_URL} from './utils.js';
+/**
+ * AWTRIX3 Dashboard Module
+ * Professional dashboard with live stats, screen display and controls
+ * @version 2.0.0
+ */
 
+import { CONFIG } from './config.js';
+import { statsAPI, displayAPI } from './api-service.js';
+import { eventManager } from './event-manager.js';
+import { errorHandler, withErrorHandling } from './error-handler.js';
+import { toastSystem, loadingSystem, ProgressBar } from './ui-components.js';
+import { PerformanceUtils } from './utils.js';
 
-const c = document.getElementById('c');
-let d, w = 1052, h = 260, e, f = false, g = performance.now();
-let recordingStartTime = 0;
-let recordingTimer = null;
-
-if (c) {
-    d = c.getContext('2d');
-    c.width = w;
-    c.height = h;
-} f
-
-function updateRecordingTime() {
-    const recordTimeElement = document.getElementById('recordTime');
-    if (!recordTimeElement) return;
-
-    const elapsed = Math.floor((Date.now() - recordingStartTime) / 1000);
-    const minutes = Math.floor(elapsed / 60);
-    const seconds = elapsed % 60;
-    recordTimeElement.textContent = ` (${minutes}:${seconds.toString().padStart(2, '0')})`;
-}
-
-// Check if we're in an iframe
-const isIframe = window !== window.parent;
-
-// Fetch und Canvas-Rendering-Funktion
-function j() {
-    proxyFetch(`${BASE_URL}/api/screen`)
-        .then(data => {
-            if (!d) return; // Canvas nicht verfügbar
-            d.clearRect(0, 0, c.width, c.height);
-            for (let b = 0; b < 8; b++) {
-                for (let i = 0; i < 32; i++) {
-                    const k = data[b * 32 + i];
-                    const l = (k & 0xff0000) >> 16;
-                    const m = (k & 0x00ff00) >> 8;
-                    const n = k & 0x0000ff;
-                    d.fillStyle = `rgb(${l},${m},${n})`;
-                    d.fillRect(i * 33, b * 33, 29, 29);
-                }
-            }
-            if (f) {
-                const o = performance.now();
-                const p = Math.round(o - g);
-                g = o;
-                const q = d.getImageData(0, 0, w, h).data;
-                const r = "rgb444";
-                const s = quantize(q, 256, { format: r });
-                const t = applyPalette(q, s, r);
-                e.writeFrame(t, w, h, {
-                    palette: s,
-                    delay: p
-                });
-            }
-            j(); // Rekursion für kontinuierliches Update
-        })
-        .catch(error => console.error("Error fetching screen data:", error));
-}
-
-// Event-Listener für Buttons
-document.getElementById("downloadpng")?.addEventListener("click", () => {
-    const a = document.createElement("a");
-    a.href = c?.toDataURL();
-    a.download = 'awtrix.png';
-    a.click();
-});
-
-document.getElementById("nextapp")?.addEventListener("click", () => {
-    proxyFetch(`${BASE_URL}/api/nextapp`, { method: 'POST' })
-        .catch(error => console.error("Error changing app:", error));
-});
-
-document.getElementById("previousapp")?.addEventListener("click", () => {
-    proxyFetch(`${BASE_URL}/api/previousapp`, { method: 'POST' })
-        .catch(error => console.error("Error changing app:", error));
-});
-
-document.getElementById("startgif")?.addEventListener("click", async function () {
-    const button = this;
-    const span = button.querySelector('span:not(.record-time)');
-
-    if (f) {
-        // Stop recording
-        e.finish();
-        const b = e.bytesView();
-        l(b, 'awtrix.gif', 'image/gif');
-        f = false;
-        span.textContent = "Record GIF";
-        clearInterval(recordingTimer);
-        document.getElementById('recordTime').textContent = '';
-    } else {
-        // Start recording
-        e = GIFEncoder();
-        g = performance.now();
-        f = true;
-        span.textContent = "Stop Recording";
-        recordingStartTime = Date.now();
-        updateRecordingTime();
-        recordingTimer = setInterval(updateRecordingTime, 1000);
+/**
+ * Live Matrix Display Component
+ */
+class MatrixDisplay {
+  constructor(canvasElement) {
+    this.canvas = canvasElement;
+    this.ctx = this.canvas ? this.canvas.getContext('2d') : null;
+    this.isRunning = false;
+    this.animationId = null;
+    
+    if (this.canvas && this.ctx) {
+      this.canvas.width = CONFIG.UI.CANVAS_DIMENSIONS.WIDTH;
+      this.canvas.height = CONFIG.UI.CANVAS_DIMENSIONS.HEIGHT;
+      this.setupCanvas();
     }
-});
+  }
 
-function l(b, a, c) {
-    const d = b instanceof Blob ? b : new Blob([b], { type: c });
-    const e = URL.createObjectURL(d);
-    const f = document.createElement("a");
-    f.href = e;
-    f.download = a;
-    f.click();
+  setupCanvas() {
+    // Set canvas styles for responsive behavior
+    this.canvas.style.maxWidth = '100%';
+    this.canvas.style.height = 'auto';
+    this.canvas.style.border = '2px solid var(--bs-border-color)';
+    this.canvas.style.borderRadius = '8px';
+  }
+
+  async start() {
+    if (this.isRunning) return;
+    
+    this.isRunning = true;
+    await this.render();
+  }
+
+  stop() {
+    this.isRunning = false;
+    if (this.animationId) {
+      cancelAnimationFrame(this.animationId);
+      this.animationId = null;
+    }
+  }
+
+  async render() {
+    if (!this.isRunning || !this.ctx) return;
+
+    try {
+      const result = await displayAPI.getScreenData();
+      
+      if (result.success && result.data) {
+        this.drawPixels(result.data);
+      }
+    } catch (error) {
+      console.warn('Failed to get screen data:', error);
+    }
+
+    // Schedule next frame
+    this.animationId = requestAnimationFrame(() => this.render());
+  }
+
+  drawPixels(screenData) {
+    if (!this.ctx || !Array.isArray(screenData)) return;
+
+    // Clear canvas
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+    const { MATRIX_WIDTH, MATRIX_HEIGHT, CELL_SIZE, CELL_PADDING } = CONFIG.UI.CANVAS_DIMENSIONS;
+
+    for (let y = 0; y < MATRIX_HEIGHT; y++) {
+      for (let x = 0; x < MATRIX_WIDTH; x++) {
+        const index = y * MATRIX_WIDTH + x;
+        const colorValue = screenData[index] || 0;
+
+        const r = (colorValue & 0xff0000) >> 16;
+        const g = (colorValue & 0x00ff00) >> 8;
+        const b = colorValue & 0x0000ff;
+
+        this.ctx.fillStyle = `rgb(${r},${g},${b})`;
+        this.ctx.fillRect(
+          x * CELL_SIZE, 
+          y * CELL_SIZE, 
+          CELL_PADDING, 
+          CELL_PADDING
+        );
+      }
+    }
+  }
+
+  async captureScreenshot() {
+    if (!this.canvas) return null;
+
+    try {
+      const dataUrl = this.canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.href = dataUrl;
+      link.download = 'awtrix-screenshot.png';
+      link.click();
+      
+      toastSystem.success('Screenshot saved successfully');
+      return dataUrl;
+    } catch (error) {
+      errorHandler.handleError(error, { context: 'screenshot' });
+      return null;
+    }
+  }
+
+  resize() {
+    if (!this.canvas) return;
+
+    const container = this.canvas.parentElement;
+    if (!container) return;
+
+    const containerWidth = container.clientWidth;
+    const scale = containerWidth / CONFIG.UI.CANVAS_DIMENSIONS.WIDTH;
+
+    this.canvas.style.width = `${containerWidth}px`;
+    this.canvas.style.height = `${CONFIG.UI.CANVAS_DIMENSIONS.HEIGHT * scale}px`;
+  }
 }
 
-function formatUptime(seconds) {
+/**
+ * GIF Recording Component
+ */
+class GIFRecorder {
+  constructor() {
+    this.isRecording = false;
+    this.encoder = null;
+    this.startTime = 0;
+    this.frameCount = 0;
+    this.recordingTimer = null;
+  }
+
+  async startRecording(canvas) {
+    if (this.isRecording || !canvas) return false;
+
+    try {
+      // Dynamic import for GIF encoder to reduce initial bundle size
+      const { GIFEncoder, quantize, applyPalette } = await import('https://unpkg.com/gifenc@1.0.3');
+      
+      this.encoder = GIFEncoder();
+      this.isRecording = true;
+      this.startTime = performance.now();
+      this.frameCount = 0;
+
+      this.captureFrame(canvas, GIFEncoder, quantize, applyPalette);
+      this.updateRecordingUI(true);
+
+      toastSystem.info('GIF recording started', { duration: 1500 });
+      return true;
+
+    } catch (error) {
+      errorHandler.handleError(error, { context: 'gif_recording_start' });
+      return false;
+    }
+  }
+
+  stopRecording() {
+    if (!this.isRecording || !this.encoder) return null;
+
+    this.isRecording = false;
+    this.encoder.finish();
+    
+    const gifBlob = new Blob([this.encoder.bytesView()], { type: 'image/gif' });
+    this.downloadGIF(gifBlob);
+    
+    this.updateRecordingUI(false);
+    this.encoder = null;
+
+    toastSystem.success(`GIF recording completed (${this.frameCount} frames)`);
+    return gifBlob;
+  }
+
+  captureFrame(canvas, GIFEncoder, quantize, applyPalette) {
+    if (!this.isRecording || !this.encoder) return;
+
+    const currentTime = performance.now();
+    const deltaTime = Math.round(currentTime - this.startTime);
+    
+    const imageData = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
+    const palette = quantize(imageData, 256, { format: 'rgb444' });
+    const indexedPixels = applyPalette(imageData, palette, 'rgb444');
+
+    this.encoder.writeFrame(indexedPixels, canvas.width, canvas.height, {
+      palette,
+      delay: Math.max(deltaTime, 50) // Minimum 50ms between frames
+    });
+
+    this.frameCount++;
+    this.startTime = currentTime;
+
+    // Schedule next frame
+    if (this.isRecording) {
+      requestAnimationFrame(() => this.captureFrame(canvas, GIFEncoder, quantize, applyPalette));
+    }
+  }
+
+  downloadGIF(blob) {
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `awtrix-${new Date().getTime()}.gif`;
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
+  updateRecordingUI(isRecording) {
+    const button = document.getElementById('record-gif-btn');
+    const timeDisplay = document.getElementById('recording-time');
+    
+    if (!button) return;
+
+    if (isRecording) {
+      button.classList.add('recording');
+      button.innerHTML = '<i class="fas fa-stop"></i> Stop Recording <span id="record-time"></span>';
+      
+      this.recordingTimer = setInterval(() => {
+        const elapsed = Math.floor((Date.now() - (this.startTime || Date.now())) / 1000);
+        const minutes = Math.floor(elapsed / 60);
+        const seconds = elapsed % 60;
+        
+        const timeEl = document.getElementById('record-time');
+        if (timeEl) {
+          timeEl.textContent = ` (${minutes}:${seconds.toString().padStart(2, '0')})`;
+        }
+      }, 1000);
+      
+    } else {
+      button.classList.remove('recording');
+      button.innerHTML = '<i class="fas fa-record-vinyl"></i> Record GIF';
+      
+      if (this.recordingTimer) {
+        clearInterval(this.recordingTimer);
+        this.recordingTimer = null;
+      }
+    }
+  }
+}
+
+/**
+ * System Statistics Component
+ */
+class SystemStats {
+  constructor(container) {
+    this.container = container;
+    this.refreshInterval = null;
+    this.isActive = false;
+    this.charts = {};
+  }
+
+  async start() {
+    if (this.isActive) return;
+    
+    this.isActive = true;
+    await this.loadStats();
+    
+    this.refreshInterval = eventManager.setInterval(
+      () => this.loadStats(),
+      CONFIG.UI.STATS_REFRESH_INTERVAL
+    );
+  }
+
+  stop() {
+    this.isActive = false;
+    
+    if (this.refreshInterval) {
+      this.refreshInterval();
+      this.refreshInterval = null;
+    }
+
+    // Destroy any charts
+    Object.values(this.charts).forEach(chart => {
+      if (chart && typeof chart.destroy === 'function') {
+        chart.destroy();
+      }
+    });
+    this.charts = {};
+  }
+
+  async loadStats() {
+    try {
+      const result = await statsAPI.getStats();
+      
+      if (result.success && result.data) {
+        const formattedStats = statsAPI.formatStats(result.data);
+        this.updateDisplay(formattedStats);
+      } else {
+        this.showError();
+      }
+    } catch (error) {
+      console.warn('Failed to load stats:', error);
+      this.showError();
+    }
+  }
+
+  updateDisplay(stats) {
+    if (!stats || !this.container) return;
+
+    // Update RAM usage
+    this.updateStat('ram-usage', 
+      `${this.formatBytes(stats.ram.used)} / ${this.formatBytes(stats.ram.total)} (${stats.ram.percentage}%)`
+    );
+    
+    // Update Flash usage
+    this.updateStat('flash-usage',
+      `${this.formatBytes(stats.flash.used)} / ${this.formatBytes(stats.flash.total)} (${stats.flash.percentage}%)`
+    );
+    
+    // Update Uptime
+    this.updateStat('uptime', this.formatUptime(stats.uptime));
+    
+    // Update WiFi Signal
+    this.updateStat('wifi-signal', 
+      `${stats.wifi.strength}% (${stats.wifi.signal} dB)`
+    );
+    
+    // Update Current App
+    this.updateStat('current-app', stats.currentApp || 'None');
+    
+    // Update SSID and IP
+    this.updateStat('wifi-ssid', stats.wifi.ssid || 'Not connected');
+    this.updateStat('wifi-ip', stats.wifi.ip || 'N/A');
+
+    // Update progress bars if they exist
+    this.updateProgressBar('ram-progress', stats.ram.percentage);
+    this.updateProgressBar('flash-progress', stats.flash.percentage);
+
+    // Remove error states
+    this.container.querySelectorAll('.stat-error').forEach(el => {
+      el.classList.remove('stat-error');
+    });
+  }
+
+  updateStat(id, value) {
+    const element = document.getElementById(id);
+    if (element) {
+      // Animate value change
+      element.style.transform = 'translateY(-3px)';
+      element.style.opacity = '0.7';
+      
+      setTimeout(() => {
+        element.textContent = value;
+        element.style.transform = 'translateY(0)';
+        element.style.opacity = '1';
+      }, 100);
+    }
+  }
+
+  updateProgressBar(id, percentage) {
+    const progressBar = document.getElementById(id);
+    if (progressBar) {
+      const bar = progressBar.querySelector('.progress-bar');
+      if (bar) {
+        bar.style.width = `${Math.min(100, Math.max(0, percentage))}%`;
+        bar.setAttribute('aria-valuenow', percentage);
+        
+        // Update color based on usage
+        bar.className = bar.className.replace(/bg-\w+/, this.getProgressColor(percentage));
+      }
+    }
+  }
+
+  getProgressColor(percentage) {
+    if (percentage < 50) return 'bg-success';
+    if (percentage < 75) return 'bg-warning';
+    return 'bg-danger';
+  }
+
+  showError() {
+    const statElements = ['ram-usage', 'flash-usage', 'uptime', 'wifi-signal', 'current-app'];
+    
+    statElements.forEach(id => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.textContent = '--';
+        element.closest('.stat-card')?.classList.add('stat-error');
+      }
+    });
+  }
+
+  formatBytes(bytes) {
+    if (bytes === 0) return '0 B';
+    const k = 1024;
+    const sizes = ['B', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  }
+
+  formatUptime(seconds) {
     const days = Math.floor(seconds / (24 * 60 * 60));
     const hours = Math.floor((seconds % (24 * 60 * 60)) / (60 * 60));
     const minutes = Math.floor((seconds % (60 * 60)) / 60);
     const secs = seconds % 60;
 
     return `${days}d ${hours}h ${minutes}m ${secs}s`;
+  }
 }
 
-function formatBytes(bytes) {
-    if (bytes === 0) return '0 B';
-    const k = 1024;
-    const sizes = ['B', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-}
+/**
+ * Dashboard Controller
+ */
+class DashboardController {
+  constructor() {
+    this.matrixDisplay = null;
+    this.gifRecorder = new GIFRecorder();
+    this.systemStats = null;
+    this.isInitialized = false;
+  }
 
-let statsInterval;
-const STATS_REFRESH_INTERVAL = 5000; // 5 seconds
+  async initialize() {
+    if (this.isInitialized) return;
 
-// Enhanced stats fetching with error handling and retry
-async function fetchStats() {
     try {
-        await getBaseUrl();
-        const stats = await proxyFetch(`${BASE_URL}/api/stats`);
-        updateStatsDisplay(stats);
-        return true;
+      await this.setupComponents();
+      this.setupEventListeners();
+      this.setupResponsiveHandling();
+      
+      this.isInitialized = true;
+      console.info('Dashboard initialized successfully');
+      
     } catch (error) {
-        console.error('Error fetching stats:', error);
-        updateStatsError();
-        return false;
+      errorHandler.handleError(error, { 
+        context: 'dashboard_initialization',
+        severity: 'high' 
+      });
     }
-}
+  }
 
-function updateStatsDisplay(stats) {
-    const elements = {
-        ram: document.getElementById('ramValue'),
-        flash: document.getElementById('flashValue'),
-        uptime: document.getElementById('uptimeValue'),
-        wifi: document.getElementById('wifiValue'),
-        app: document.getElementById('currentApp')
-    };
-
-    // Update with animation
-    animateValue(elements.ram, `${formatBytes(stats.usedRam)} / ${formatBytes(stats.totalRam)}`);
-    animateValue(elements.flash, `${formatBytes(stats.usedFlash)} / ${formatBytes(stats.totalFlash)}`);
-    animateValue(elements.uptime, formatUptime(stats.uptime));
-    animateValue(elements.wifi, `${stats.wifi_signal} dB`);
-    animateValue(elements.app, stats.app || 'None');
-
-    // Remove error states if present
-    Object.values(elements).forEach(el => {
-        if (el) el.closest('.stat-item')?.classList.remove('error');
-    });
-}
-
-function updateStatsError() {
-    const elements = ['ramValue', 'flashValue', 'uptimeValue', 'wifiValue', 'currentApp'];
-    elements.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) {
-            el.textContent = '--';
-            el.closest('.stat-item')?.classList.add('error');
-        }
-    });
-}
-
-function animateValue(element, newValue) {
-    if (!element) return;
-    
-    element.style.transform = 'translateY(-5px)';
-    element.style.opacity = '0';
-    
-    setTimeout(() => {
-        element.textContent = newValue;
-        element.style.transform = 'translateY(0)';
-        element.style.opacity = '1';
-    }, 200);
-}
-
-// Initialize Chart.js for message history
-let messageChart;
-function initMessageChart() {
-    const ctx = document.getElementById('messageChart').getContext('2d');
-    messageChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: [],
-            datasets: [{
-                label: 'Messages',
-                data: [],
-                borderColor: 'rgb(59, 130, 246)',
-                tension: 0.4
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-}
-
-function updateMessageChart(history) {
-    if (!messageChart) return;
-
-    messageChart.data.labels = history.map((_, i) => `${i}m ago`);
-    messageChart.data.datasets[0].data = history;
-    messageChart.update();
-}
-
-// Add fullscreen functionality
-document.getElementById('fullscreen')?.addEventListener('click', () => {
-    const container = document.querySelector('.matrix-display');
-    if (container.requestFullscreen) {
-        container.requestFullscreen();
+  async setupComponents() {
+    // Initialize Matrix Display
+    const canvas = document.getElementById('matrix-canvas');
+    if (canvas) {
+      this.matrixDisplay = new MatrixDisplay(canvas);
+      await this.matrixDisplay.start();
     }
+
+    // Initialize System Stats
+    const statsContainer = document.getElementById('stats-container');
+    if (statsContainer) {
+      this.systemStats = new SystemStats(statsContainer);
+      await this.systemStats.start();
+    }
+  }
+
+  setupEventListeners() {
+    // Screenshot button
+    const screenshotBtn = document.getElementById('screenshot-btn');
+    if (screenshotBtn && this.matrixDisplay) {
+      eventManager.addEventListener(screenshotBtn, 'click', 
+        withErrorHandling(() => this.matrixDisplay.captureScreenshot())
+      );
+    }
+
+    // GIF Recording button
+    const gifBtn = document.getElementById('record-gif-btn');
+    if (gifBtn) {
+      eventManager.addEventListener(gifBtn, 'click', 
+        withErrorHandling(async () => {
+          if (this.gifRecorder.isRecording) {
+            this.gifRecorder.stopRecording();
+          } else {
+            const canvas = document.getElementById('matrix-canvas');
+            await this.gifRecorder.startRecording(canvas);
+          }
+        })
+      );
+    }
+
+    // App Navigation buttons
+    const nextAppBtn = document.getElementById('next-app-btn');
+    if (nextAppBtn) {
+      eventManager.addEventListener(nextAppBtn, 'click',
+        withErrorHandling(async () => {
+          loadingSystem.show(nextAppBtn, { size: 'small', text: '' });
+          try {
+            await displayAPI.nextApp();
+            toastSystem.success('Switched to next app');
+          } finally {
+            loadingSystem.hide(nextAppBtn);
+          }
+        })
+      );
+    }
+
+    const prevAppBtn = document.getElementById('prev-app-btn');
+    if (prevAppBtn) {
+      eventManager.addEventListener(prevAppBtn, 'click',
+        withErrorHandling(async () => {
+          loadingSystem.show(prevAppBtn, { size: 'small', text: '' });
+          try {
+            await displayAPI.previousApp();
+            toastSystem.success('Switched to previous app');
+          } finally {
+            loadingSystem.hide(prevAppBtn);
+          }
+        })
+      );
+    }
+
+    // Fullscreen button
+    const fullscreenBtn = document.getElementById('fullscreen-btn');
+    if (fullscreenBtn) {
+      eventManager.addEventListener(fullscreenBtn, 'click', () => {
+        const container = document.querySelector('.matrix-container');
+        if (container && container.requestFullscreen) {
+          container.requestFullscreen().catch(err => {
+            console.warn('Fullscreen not supported:', err);
+          });
+        }
+      });
+    }
+  }
+
+  setupResponsiveHandling() {
+    // Handle window resize for canvas
+    const debouncedResize = PerformanceUtils.debounce(() => {
+      if (this.matrixDisplay) {
+        this.matrixDisplay.resize();
+      }
+    }, 250);
+
+    eventManager.addEventListener(window, 'resize', debouncedResize);
+    eventManager.addEventListener(window, 'orientationchange', debouncedResize);
+
+    // Initial resize
+    if (this.matrixDisplay) {
+      this.matrixDisplay.resize();
+    }
+  }
+
+  // Public methods for external control
+  async refresh() {
+    if (this.systemStats) {
+      await this.systemStats.loadStats();
+    }
+  }
+
+  pause() {
+    if (this.matrixDisplay) {
+      this.matrixDisplay.stop();
+    }
+    if (this.systemStats) {
+      this.systemStats.stop();
+    }
+  }
+
+  resume() {
+    if (this.matrixDisplay) {
+      this.matrixDisplay.start();
+    }
+    if (this.systemStats) {
+      this.systemStats.start();
+    }
+  }
+
+  cleanup() {
+    this.pause();
+    
+    if (this.gifRecorder && this.gifRecorder.isRecording) {
+      this.gifRecorder.stopRecording();
+    }
+  }
+}
+
+// Initialize dashboard when page loads
+let dashboardController = null;
+
+eventManager.onPageChange('dashboard', async () => {
+  if (dashboardController) {
+    dashboardController.cleanup();
+  }
+  
+  // Small delay to ensure DOM is ready
+  await new Promise(resolve => setTimeout(resolve, 100));
+  
+  dashboardController = new DashboardController();
+  await dashboardController.initialize();
 });
 
-// Responsive Canvas-Anpassung
-function resizeCanvas() {
-    const container = document.getElementById('container-live');
-    if (!container || !c) return;
-
-    const containerWidth = container.clientWidth;
-    const scale = containerWidth / 1052;
-
-    c.style.width = `${containerWidth}px`;
-    c.style.height = `${260 * scale}px`;
-}
-
-// Event Listener für Resize
-window.addEventListener('resize', resizeCanvas);
-window.addEventListener('orientationchange', resizeCanvas);
-
-// Event listener cleanup
-window.addEventListener('beforeunload', () => {
-    if (statsInterval) clearInterval(statsInterval);
+// Handle page visibility changes
+eventManager.addEventListener(document, 'visibilitychange', () => {
+  if (dashboardController) {
+    if (document.visibilityState === 'hidden') {
+      dashboardController.pause();
+    } else {
+      dashboardController.resume();
+    }
+  }
 });
 
-// Initialize dashboard with stats
-async function initializeDashboard() {
-    // Initial fetch
-    await fetchStats();
-    
-    // Clear any existing interval
-    if (statsInterval) clearInterval(statsInterval);
-    
-    // Set up new interval
-    statsInterval = setInterval(fetchStats, STATS_REFRESH_INTERVAL);
-    
-    // Start canvas rendering
-    resizeCanvas();
-    j();
-}
-
-// Initialize when DOM is ready
-initializeDashboard();
-
+// Export for external use
+export { DashboardController };
