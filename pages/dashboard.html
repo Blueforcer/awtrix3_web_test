@@ -1,50 +1,53 @@
 <script type="module" src="js/dashboard.js"></script>
-<div id="dashboard" class="page animate__animated animate__fadeIn">
-    <div class="row g-4">
-        <div class="col-12 col-lg-6">
-            <div class="card shadow-sm mb-4">
-                <div class="card-header d-flex align-items-center gap-2">
-                    <i class="fas fa-gauge fa-lg text-primary"></i>
-                    <h2 class="mb-0 fs-5">System Overview</h2>
-                </div>
-                <div class="card-body">
-                    <div class="row text-center">
-                        <div class="col">
-                            <div class="stat-header"><i class="fas fa-microchip"></i> RAM</div>
-                            <div class="stat-value" id="ramValue">--</div>
+<div id="dashboard" class="page">
+    <div class="dashboard-grid">
+        <!-- Combined System Overview and Display Section -->
+        <section class="system-status-display">       
+
+                <!-- System Stats -->
+                <div class="stats-bar">
+                    <div class="stat-item">
+                        <div class="stat-header">
+                            <i class="fas fa-microchip"></i>
+                            <span>RAM</span>
                         </div>
-                        <div class="col">
-                            <div class="stat-header"><i class="fas fa-hdd"></i> Flash</div>
-                            <div class="stat-value" id="flashValue">--</div>
+                        <div class="stat-value" id="ramValue">--</div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-header">
+                            <i class="fas fa-hdd"></i>
+                            <span>Flash</span>
                         </div>
-                        <div class="col">
-                            <div class="stat-header"><i class="fas fa-clock"></i> Uptime</div>
-                            <div class="stat-value" id="uptimeValue">--</div>
+                        <div class="stat-value" id="flashValue">--</div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-header">
+                            <i class="fas fa-clock"></i>
+                            <span>Uptime</span>
                         </div>
-                        <div class="col">
-                            <div class="stat-header"><i class="fas fa-wifi"></i> Signal</div>
-                            <div class="stat-value" id="wifiValue">--</div>
+                        <div class="stat-value" id="uptimeValue">--</div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-header">
+                            <i class="fas fa-wifi"></i>
+                            <span>Signal</span>
                         </div>
-                        <div class="col">
-                            <div class="stat-header"><i class="fas fa-cube"></i> App</div>
-                            <div class="stat-value" id="currentApp">--</div>
+                        <div class="stat-value" id="wifiValue">--</div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-header">
+                            <i class="fas fa-cube"></i>
+                            <span>App</span>
                         </div>
+                        <div class="stat-value" id="currentApp">--</div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="col-12 col-lg-6">
-            <div class="card shadow-sm mb-4">
-                <div class="card-header d-flex align-items-center gap-2">
-                    <i class="fas fa-display fa-lg text-primary"></i>
-                    <h2 class="mb-0 fs-5">Matrix Display</h2>
-                </div>
-                <div class="card-body">
-                    <canvas id="c" width="1052" height="260" style="width:100%;max-width:100%;border-radius:12px;box-shadow:0 2px 8px rgba(37,99,235,0.15);"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
+                <div class="content-wrapper">
+                    <!-- Matrix Display -->
                     <div class="matrix-display">
                         <div class="matrix-container" id="container-live">
                             <canvas id="c"></canvas>

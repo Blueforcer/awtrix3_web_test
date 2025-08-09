@@ -1,18 +1,19 @@
 <script type="module" src="js/settings.js"></script>
-<div id="settings" class="page animate__animated animate__fadeIn">
-    <div class="card shadow-sm mb-4">
-        <div class="card-header d-flex align-items-center gap-2">
-            <i class="fa-solid fa-gear fa-lg text-primary"></i>
-            <h2 class="mb-0 fs-5">System Settings</h2>
-        </div>
-        <div class="card-body">
-            <div id="settings-loading" class="loading-indicator mb-3">
-                <i class="fas fa-spinner loading-spinner"></i>
-                <span>Loading Settings...</span>
-            </div>
-            <div class="content-card settings-section">
-                <h2>Basic Settings</h2>
-                <div class="settings-grid">
+<div id="settings" class="page">
+    <header class="header">
+        <h1>System Settings</h1>
+    </header>
+
+    <!-- Add loading indicator -->
+    <div id="settings-loading" class="loading-indicator">
+        <i class="fas fa-spinner loading-spinner"></i>
+        <span>Loading Settings...</span>
+    </div>
+
+    <!-- Basic Settings -->
+    <div class="content-card settings-section">
+        <h2>Basic Settings</h2>
+        <div class="settings-grid">
             <div class="setting-item">
                 <label for="HOSTNAME">Hostname</label>
                 <input type="text" id="HOSTNAME" class="form-control" value="awtrix-123">
