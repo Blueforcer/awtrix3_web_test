@@ -1,9 +1,14 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
 :root {
     --primary: #2563eb;
     --primary-hover: #1d4ed8;
     --sidebar-width: 280px;
     --header-height: 60px;
-    --transition: all 0.3s ease;
+    --transition: all 0.3s cubic-bezier(.4,0,.2,1);
+    --bg-gradient: linear-gradient(135deg, #2563eb 0%, #1e293b 100%);
+    --card-bg: #fff;
+    --card-radius: 18px;
+    --shadow: 0 4px 24px rgba(30,41,59,0.12);
 }
 
 * {
@@ -16,14 +21,17 @@
 body {
     display: flex;
     min-height: 100vh;
-    background: #f8fafc;
+    background: #f3f6fb;
     color: #1e293b;
     overflow-x: hidden;
+    font-size: 1rem;
+    transition: var(--transition);
 }
 
+/* Sidebar */
 .sidebar {
     width: var(--sidebar-width);
-    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+    background: var(--bg-gradient);
     padding: 2rem 1.5rem;
     display: flex;
     flex-direction: column;
@@ -32,9 +40,11 @@ body {
     left: 0;
     top: 0;
     z-index: 1001;
+    box-shadow: var(--shadow);
+    border-radius: 0 24px 24px 0;
     transition: var(--transition);
-    
 }
+
 
 .sidebar.hidden {
     transform: translateX(-100%);
@@ -44,9 +54,67 @@ body {
 .sidebar-footer {
     text-align: center;
     padding: 1rem;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     border-top: 1px solid #374151;
     color: #cbd5e1;
+    margin-top: 2rem;
+}
+
+/* Navigation */
+.nav-link.nav-item {
+    color: #e0e7ef;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    transition: background var(--transition), color var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.nav-link.nav-item.active,
+.nav-link.nav-item:hover {
+    background: rgba(37,99,235,0.15);
+    color: #fff;
+}
+
+/* Main Content */
+.main-content {
+    margin-left: var(--sidebar-width);
+    width: calc(100vw - var(--sidebar-width));
+    min-height: 100vh;
+    background: #f3f6fb;
+    transition: var(--transition);
+}
+
+#page-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 0;
+}
+
+/* Card Style */
+.card {
+    background: var(--card-bg);
+    border-radius: var(--card-radius);
+    box-shadow: var(--shadow);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    transition: var(--transition);
+}
+
+/* Logo */
+.logo-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(37,99,235,0.15);
+    margin-right: 0.5rem;
+}
+
+/* Animations */
+.animate__animated {
+    animation-duration: 0.7s;
 }
 
 
