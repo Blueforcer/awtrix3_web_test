@@ -142,6 +142,41 @@
         <span>Connected</span>
     </div>
 
+    <!-- PWA Service Worker Registration -->
+    <script>
+        // Register Service Worker for PWA functionality
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', async () => {
+                try {
+                    const registration = await navigator.serviceWorker.register('/sw.js');
+                    console.log('🔧 Service Worker registered:', registration.scope);
+                    
+                    // Listen for updates
+                    registration.addEventListener('updatefound', () => {
+                        const newWorker = registration.installing;
+                        if (newWorker) {
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed') {
+                                    if (navigator.serviceWorker.controller) {
+                                        // Show update notification
+                                        showUpdateNotification();
+                                    }
+                                }
+                            });
+                        }
+                    });
+                } catch (error) {
+                    console.warn('Service Worker registration failed:', error);
+                }
+            });
+        }
+        
+        function showUpdateNotification() {
+            // This would integrate with the toast system once loaded
+            console.log('📱 App update available');
+        }
+    </script>
+
     <!-- Performance Monitoring (Development) -->
     <script>
         if (window.performance && window.performance.mark) {
