@@ -1,32 +1,31 @@
-<div id="time" class="page animate__animated animate__fadeIn">
-    <div class="card shadow-sm mb-4">
-        <div class="card-header d-flex align-items-center gap-2">
-            <i class="fa-solid fa-clock fa-lg text-primary"></i>
-            <h2 class="mb-0 fs-5">Zeit Einstellungen</h2>
-        </div>
-        <div class="card-body">
+    <!-- Zeit Einstellungen -->
+    <div id="time" class="page">
+        <header class="header">
+            <h1>Zeit Einstellungen</h1>
+        </header>
+        <div class="content-card">
             <form id="timeForm">
-                <div class="mb-3">
-                    <label for="timezone" class="form-label">Zeitzone</label>
-                    <select id="timezone" class="form-select" required>
+                <div class="form-group">
+                    <label for="timezone">Zeitzone</label>
+                    <select id="timezone" class="form-control" required>
                         <option value="Europe/Berlin">Berlin (UTC+01:00)</option>
                         <option value="Europe/London">London (UTC+00:00)</option>
                         <option value="Europe/Paris">Paris (UTC+01:00)</option>
                         <option value="Europe/Rome">Rom (UTC+01:00)</option>
                     </select>
                 </div>
-                <div class="mb-3">
-                    <label for="ntp" class="form-label">NTP Server</label>
+                <div class="form-group">
+                    <label for="ntp">NTP Server</label>
                     <input type="text" id="ntp" class="form-control" value="pool.ntp.org" required>
                 </div>
-                <button type="submit" class="btn btn-primary">
-                    <i class="fa-solid fa-save"></i>
+                <button type="submit" class="btn">
+                    <i data-feather="save"></i>
                     Speichern
                 </button>
             </form>
-            <div class="connection-status mt-4">
-                <div class="badge bg-success mb-2">
-                    <i class="fa-solid fa-check-circle"></i>
+            <div class="connection-status">
+                <div class="status-badge success">
+                    <i data-feather="check-circle"></i>
                     Synchronisiert
                 </div>
                 <p class="info-text">Letzte Synchronisation: 05.01.2025 14:30:22</p>

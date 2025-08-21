@@ -1,34 +1,41 @@
 <script type="module" src="js/icons.js"></script>
-<div id="icons" class="page animate__animated animate__fadeIn">
-    <div class="card shadow-sm mb-4">
-        <div class="card-header d-flex align-items-center gap-2">
-            <i class="fa-solid fa-icons fa-lg text-primary"></i>
-            <h2 class="mb-0 fs-5">Icon Galerie</h2>
+<div id="icons" class="page">
+    <header class="header">
+        <h1>Icon Galerie</h1>
+    </header>
+
+    <div class="icon-actions-bar">
+        <!-- Linke Seite: Toolbar für Aktionen -->
+        <div class="icon-toolbar">
+            <button class="toolbar-btn rename-btn" disabled>
+                <i class="fa-solid fa-pen-to-square"></i>
+                Umbenennen
+            </button>
+            <button class="toolbar-btn delete-btn" disabled>
+                <i class="fa-solid fa-trash"></i>
+                Löschen
+            </button>
         </div>
-        <div class="card-body">
-            <div class="d-flex justify-content-between mb-3">
-                <div>
-                    <button class="btn btn-outline-primary rename-btn me-2" disabled>
-                        <i class="fa-solid fa-pen-to-square"></i> Umbenennen
-                    </button>
-                    <button class="btn btn-outline-danger delete-btn" disabled>
-                        <i class="fa-solid fa-trash"></i> Löschen
-                    </button>
-                </div>
-                <div>
-                    <label for="icon-upload" class="btn btn-primary me-2">
-                        <i class="fa-solid fa-upload"></i> Upload
-                    </label>
-                    <button class="btn btn-secondary" id="show-lametric">
-                        <i class="fa-solid fa-download"></i> LaMetric
-                    </button>
-                </div>
-            </div>
-            <div id="esp-icon-grid" class="icon-grid row g-3">
-                <!-- Dynamically loaded icons will appear here -->
-            </div>
+        <!-- Rechte Seite: Add Icon Buttons -->
+        <div class="add-icons">
+            <label for="icon-upload" class="btn btn-icon">
+                <i class="fa-solid fa-upload"></i>
+                Upload
+            </label>
+            <button class="btn btn-icon" id="show-lametric">
+                <i class="fa-solid fa-download"></i>
+                LaMetric
+            </button>
         </div>
     </div>
+
+    <!-- Icon Grid -->
+    <div class="content-card">
+        <div id="esp-icon-grid" class="icon-grid">
+            <!-- Dynamically loaded icons will appear here -->
+        </div>
+    </div>
+
     <!-- Upload Modal -->
     <div id="upload-modal" class="modal">
         <div class="modal-content">
