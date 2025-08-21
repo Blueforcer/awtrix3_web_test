@@ -181,4 +181,190 @@ export class ThemeManager {
         ripple.parentNode.removeChild(ripple);
       }
     }, CONFIG.UI.ANIMATION_DURATION);
-  }\n  \n  setupEventListeners() {\n    // Listen for keyboard shortcuts\n    eventManager.addEventListener(document, 'keydown', (e) => {\n      // Ctrl/Cmd + Shift + T to toggle theme\n      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'T') {\n        e.preventDefault();\n        this.toggleTheme();\n      }\n    });\n    \n    // Listen for theme change events from other components\n    eventManager.addEventListener(document, 'requestThemeChange', (e) => {\n      if (e.detail && e.detail.theme) {\n        this.setTheme(e.detail.theme);\n      }\n    });\n  }\n  \n  setupThemeToggle() {\n    const themeToggle = document.getElementById('theme-toggle');\n    if (!themeToggle) return;\n    \n    // Set initial icon\n    this.updateThemeToggle();\n    \n    // Add click handler\n    eventManager.addEventListener(themeToggle, 'click', () => {\n      this.toggleTheme();\n    });\n    \n    // Add tooltip\n    themeToggle.setAttribute('title', 'Toggle theme (Ctrl+Shift+T)');\n  }\n  \n  updateThemeToggle() {\n    const themeToggle = document.getElementById('theme-toggle');\n    if (!themeToggle) return;\n    \n    const icon = themeToggle.querySelector('i');\n    if (!icon) return;\n    \n    const currentTheme = this.getCurrentTheme();\n    const isLight = currentTheme === 'light';\n    \n    // Update icon with animation\n    icon.style.transform = 'scale(0.8) rotate(180deg)';\n    \n    setTimeout(() => {\n      icon.className = `fas ${isLight ? 'fa-moon' : 'fa-sun'}`;\n      icon.style.transform = 'scale(1) rotate(0deg)';\n    }, CONFIG.UI.ANIMATION_DURATION / 2);\n    \n    // Update button color\n    themeToggle.style.background = isLight \n      ? 'var(--glass-bg)' \n      : 'linear-gradient(135deg, #667eea, #764ba2)';\n  }\n  \n  // Public API Methods\n  toggleTheme() {\n    const current = this.getCurrentTheme();\n    const next = current === 'light' ? 'dark' : 'light';\n    this.setTheme(next);\n  }\n  \n  setTheme(theme) {\n    if (!['light', 'dark', 'auto'].includes(theme)) {\n      console.warn('Invalid theme:', theme);\n      return;\n    }\n    \n    this.saveUserPreference(theme);\n    \n    const effectiveTheme = this.getEffectiveTheme();\n    this.applyTheme(effectiveTheme);\n    this.updateThemeToggle();\n  }\n  \n  getCurrentTheme() {\n    return ThemeManager.#currentTheme;\n  }\n  \n  getUserPreference() {\n    return ThemeManager.#userPreference;\n  }\n  \n  getSystemTheme() {\n    return ThemeManager.#systemTheme;\n  }\n  \n  // Theme variants for specific components\n  getComponentTheme(component) {\n    const base = this.getCurrentTheme();\n    const variants = {\n      light: {\n        sidebar: {\n          background: 'rgba(255, 255, 255, 0.95)',\n          text: '#1e293b'\n        },\n        card: {\n          background: 'rgba(255, 255, 255, 0.8)',\n          border: 'rgba(0, 0, 0, 0.1)'\n        },\n        button: {\n          primary: '#6366f1',\n          secondary: '#f1f5f9'\n        }\n      },\n      dark: {\n        sidebar: {\n          background: 'rgba(30, 41, 59, 0.95)',\n          text: '#ffffff'\n        },\n        card: {\n          background: 'rgba(30, 41, 59, 0.8)',\n          border: 'rgba(255, 255, 255, 0.1)'\n        },\n        button: {\n          primary: '#818cf8',\n          secondary: '#374151'\n        }\n      }\n    };\n    \n    return variants[base]?.[component] || {};\n  }\n  \n  // Export theme configuration for use in other components\n  exportThemeConfig() {\n    return {\n      current: this.getCurrentTheme(),\n      user: this.getUserPreference(),\n      system: this.getSystemTheme(),\n      effective: this.getEffectiveTheme()\n    };\n  }\n}\n\n// CSS for theme transitions\nconst themeTransitionCSS = `\n.theme-transitioning {\n  transition: color 300ms ease, background-color 300ms ease !important;\n}\n\n.theme-transitioning * {\n  transition: color 300ms ease, background-color 300ms ease, border-color 300ms ease !important;\n}\n\n.theme-transition-ripple {\n  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1) !important;\n}\n\n/* Enhanced theme toggle button */\n.theme-toggle {\n  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);\n}\n\n.theme-toggle i {\n  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);\n}\n\n.theme-toggle:hover {\n  transform: translateY(-2px) scale(1.05) !important;\n}\n\n.theme-toggle:active {\n  transform: translateY(0) scale(0.95) !important;\n}\n`;\n\n// Inject theme transition CSS\nif (!document.querySelector('#theme-transition-styles')) {\n  const style = document.createElement('style');\n  style.id = 'theme-transition-styles';\n  style.textContent = themeTransitionCSS;\n  document.head.appendChild(style);\n}\n\n// Create and export singleton instance\nexport const themeManager = ThemeManager.getInstance();\n\n// Make globally available for debugging\nif (CONFIG.DEBUG) {\n  window.themeManager = themeManager;\n}"
+  }
+  
+  setupEventListeners() {
+    // Listen for keyboard shortcuts
+    eventManager.addEventListener(document, 'keydown', (e) => {
+      // Ctrl/Cmd + Shift + T to toggle theme
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'T') {
+        e.preventDefault();
+        this.toggleTheme();
+      }
+    });
+    
+    // Listen for theme change events from other components
+    eventManager.addEventListener(document, 'requestThemeChange', (e) => {
+      if (e.detail && e.detail.theme) {
+        this.setTheme(e.detail.theme);
+      }
+    });
+  }
+  
+  setupThemeToggle() {
+    const themeToggle = document.getElementById('theme-toggle');
+    if (!themeToggle) return;
+    
+    // Set initial icon
+    this.updateThemeToggle();
+    
+    // Add click handler
+    eventManager.addEventListener(themeToggle, 'click', () => {
+      this.toggleTheme();
+    });
+    
+    // Add tooltip
+    themeToggle.setAttribute('title', 'Toggle theme (Ctrl+Shift+T)');
+  }
+  
+  updateThemeToggle() {
+    const themeToggle = document.getElementById('theme-toggle');
+    if (!themeToggle) return;
+    
+    const icon = themeToggle.querySelector('i');
+    if (!icon) return;
+    
+    const currentTheme = this.getCurrentTheme();
+    const isLight = currentTheme === 'light';
+    
+    // Update icon with animation
+    icon.style.transform = 'scale(0.8) rotate(180deg)';
+    
+    setTimeout(() => {
+      icon.className = `fas ${isLight ? 'fa-moon' : 'fa-sun'}`;
+      icon.style.transform = 'scale(1) rotate(0deg)';
+    }, CONFIG.UI.ANIMATION_DURATION / 2);
+    
+    // Update button color
+    themeToggle.style.background = isLight 
+      ? 'var(--glass-bg)' 
+      : 'linear-gradient(135deg, #667eea, #764ba2)';
+  }
+  
+  // Public API Methods
+  toggleTheme() {
+    const current = this.getCurrentTheme();
+    const next = current === 'light' ? 'dark' : 'light';
+    this.setTheme(next);
+  }
+  
+  setTheme(theme) {
+    if (!['light', 'dark', 'auto'].includes(theme)) {
+      console.warn('Invalid theme:', theme);
+      return;
+    }
+    
+    this.saveUserPreference(theme);
+    
+    const effectiveTheme = this.getEffectiveTheme();
+    this.applyTheme(effectiveTheme);
+    this.updateThemeToggle();
+  }
+  
+  getCurrentTheme() {
+    return ThemeManager.#currentTheme;
+  }
+  
+  getUserPreference() {
+    return ThemeManager.#userPreference;
+  }
+  
+  getSystemTheme() {
+    return ThemeManager.#systemTheme;
+  }
+  
+  // Theme variants for specific components
+  getComponentTheme(component) {
+    const base = this.getCurrentTheme();
+    const variants = {
+      light: {
+        sidebar: {
+          background: 'rgba(255, 255, 255, 0.95)',
+          text: '#1e293b'
+        },
+        card: {
+          background: 'rgba(255, 255, 255, 0.8)',
+          border: 'rgba(0, 0, 0, 0.1)'
+        },
+        button: {
+          primary: '#6366f1',
+          secondary: '#f1f5f9'
+        }
+      },
+      dark: {
+        sidebar: {
+          background: 'rgba(30, 41, 59, 0.95)',
+          text: '#ffffff'
+        },
+        card: {
+          background: 'rgba(30, 41, 59, 0.8)',
+          border: 'rgba(255, 255, 255, 0.1)'
+        },
+        button: {
+          primary: '#818cf8',
+          secondary: '#374151'
+        }
+      }
+    };
+    
+    return variants[base]?.[component] || {};
+  }
+  
+  // Export theme configuration for use in other components
+  exportThemeConfig() {
+    return {
+      current: this.getCurrentTheme(),
+      user: this.getUserPreference(),
+      system: this.getSystemTheme(),
+      effective: this.getEffectiveTheme()
+    };
+  }
+}
+
+// CSS for theme transitions
+const themeTransitionCSS = `
+.theme-transitioning {
+  transition: color 300ms ease, background-color 300ms ease !important;
+}
+
+.theme-transitioning * {
+  transition: color 300ms ease, background-color 300ms ease, border-color 300ms ease !important;
+}
+
+.theme-transition-ripple {
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Enhanced theme toggle button */
+.theme-toggle {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-toggle i {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-toggle:hover {
+  transform: translateY(-2px) scale(1.05) !important;
+}
+
+.theme-toggle:active {
+  transform: translateY(0) scale(0.95) !important;
+}
+`;
+
+// Inject theme transition CSS
+if (!document.querySelector('#theme-transition-styles')) {
+  const style = document.createElement('style');
+  style.id = 'theme-transition-styles';
+  style.textContent = themeTransitionCSS;
+  document.head.appendChild(style);
+}
+
+// Create and export singleton instance
+export const themeManager = ThemeManager.getInstance();
+
+// Make globally available for debugging
+if (CONFIG.DEBUG) {
+  window.themeManager = themeManager;
+}
