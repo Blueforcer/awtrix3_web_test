@@ -53,17 +53,8 @@ class AWTRIX3App {
   }
 
   async initializeCore() {
-    // Initialize error handling first
-    errorHandler.getInstance();
-    
-    // Initialize event management
-    eventManager.getInstance();
-    
-    // Initialize toast system
-    toastSystem.getInstance();
-    
-    // Initialize theme management
-    themeManager.getInstance();
+    // Core systems are initialized on import due to the singleton pattern.
+    // This method is responsible for loading initial configuration.
     
     // Load initial configuration
     await this.loadConfiguration();
