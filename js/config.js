@@ -8,7 +8,7 @@
 export const CONFIG = {
   // API Configuration
   API: {
-    DEFAULT_IP: '192.168.20.210',
+    DEFAULT_IP: '192.168.168.191',
     TIMEOUT: 10000,
     RETRY_ATTEMPTS: 3,
     RETRY_DELAY: 1000,

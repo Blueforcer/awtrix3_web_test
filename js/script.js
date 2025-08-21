@@ -139,7 +139,7 @@ class AWTRIX3App {
   setupSidebar() {
     const sidebar = document.querySelector('.sidebar');
     const overlay = document.getElementById('overlay');
-    const menuToggle = document.getElementById('menu-toggle');
+    const menuToggle = document.getElementById('mobile-menu-btn');
 
     if (!sidebar || !overlay) return;
 

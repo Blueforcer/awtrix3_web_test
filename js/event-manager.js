@@ -528,7 +528,7 @@ export class NavigationManager {
         if (pageId === 'creator') {
           content = `<iframe src="piskel/index.html" style="width:100%;height:80vh;border:none;" allowfullscreen></iframe>`;
         } else {
-          const response = await fetch(`${CONFIG.PATHS.PAGES}/${pageId}.html`);
+          const response = await fetch(`pages/${pageId}.html`);
           if (!response.ok) {
             throw new Error(`Failed to load page: ${pageId}`);
           }
