@@ -1,330 +1,460 @@
-<!-- Modern Dashboard Page -->\n<div class=\"dashboard-page animate-fade-in\">\n <!-- Page Header -->\n <div
-        class=\"dashboard-header\">\n <div>\n <h1 class=\"page-title\">Dashboard</h1>\n <p class=\"page-subtitle\">
-                Monitor your AWTRIX3 system status and live display</p>\n </div>\n <div class=\"header-actions\">\n
-            <button class=\"btn btn-secondary\" id=\"refresh-all\">\n <i class=\"fas fa-sync-alt\"></i>\n
-                <span>Refresh</span>\n </button>\n <div class=\"connection-indicator glass-effect\">\n <div
-                    class=\"health-indicator\"></div>\n <span>System Online</span>\n </div>\n </div>\n </div>\n\n
-    <!-- Stats Grid -->\n <div class=\"stats-grid\">\n <!-- RAM Usage Card -->\n <div class=\"stat-card
-            animate-fade-in\" style=\"animation-delay: 0.1s\">\n <div class=\"stat-header\">\n <div
-                    class=\"stat-title\">Memory Usage</div>\n <div class=\"stat-icon\">\n <i class=\"fas
-                        fa-memory\"></i>\n </div>\n </div>\n <div class=\"stat-value\" id=\"ram-usage\">--</div>\n <div
-                class=\"stat-change positive\">\n <i class=\"fas fa-arrow-up\"></i>\n <span>Available</span>\n </div>\n
-            <div class=\"progress\">\n <div class=\"progress-bar\" id=\"ram-progress\" style=\"width: 0%\"></div>\n
-            </div>\n </div>\n\n <!-- Flash Storage Card -->\n <div class=\"stat-card animate-fade-in\"
-            style=\"animation-delay: 0.2s\">\n <div class=\"stat-header\">\n <div class=\"stat-title\">Storage</div>\n
-                <div class=\"stat-icon\">\n <i class=\"fas fa-hdd\"></i>\n </div>\n </div>\n <div class=\"stat-value\"
-                id=\"flash-usage\">--</div>\n <div class=\"stat-change\">\n <i class=\"fas fa-chart-pie\"></i>\n
-                <span>Flash Memory</span>\n </div>\n <div class=\"progress\">\n <div class=\"progress-bar\"
-                    id=\"flash-progress\" style=\"width: 0%\"></div>\n </div>\n </div>\n\n <!-- WiFi Signal Card -->\n
-        <div class=\"stat-card animate-fade-in\" style=\"animation-delay: 0.3s\">\n <div class=\"stat-header\">\n <div
-                    class=\"stat-title\">WiFi Signal</div>\n <div class=\"stat-icon\">\n <i class=\"fas fa-wifi\"></i>\n
-                </div>\n </div>\n <div class=\"stat-value\" id=\"wifi-signal\">--</div>\n <div class=\"stat-change\">\n
-                <i class=\"fas fa-signal\"></i>\n <span id=\"wifi-ssid\">Not Connected</span>\n </div>\n <div
-                class=\"wifi-details\">\n <small id=\"wifi-ip\" style=\"color: var(--text-muted);\">No IP
-                    Address</small>\n </div>\n </div>\n\n <!-- Uptime Card -->\n <div class=\"stat-card
-            animate-fade-in\" style=\"animation-delay: 0.4s\">\n <div class=\"stat-header\">\n <div
-                    class=\"stat-title\">System Uptime</div>\n <div class=\"stat-icon\">\n <i class=\"fas
-                        fa-clock\"></i>\n </div>\n </div>\n <div class=\"stat-value\" id=\"uptime\">--</div>\n <div
-                class=\"stat-change positive\">\n <i class=\"fas fa-arrow-up\"></i>\n <span>Running</span>\n </div>\n
-            <div class=\"uptime-details\">\n <small style=\"color: var(--text-muted);\">Current app: <span
-                        id=\"current-app\">--</span></small>\n </div>\n </div>\n </div>\n\n
-    <!-- Matrix Display Section -->\n <div class=\"card hero-card animate-fade-in\" style=\"animation-delay: 0.5s;
-        margin: var(--space-2xl) 0;\">\n <div class=\"section-header\">\n <h2 style=\"color: white; margin: 0; display:
-                flex; align-items: center; gap: var(--space-md);\">\n <i class=\"fas fa-tv\"></i>\n Live Matrix
-                Display\n </h2>\n <div class=\"section-actions\">\n <div class=\"refresh-badge\" style=\"background:
-                    rgba(255, 255, 255, 0.2); color: white;\">\n <i class=\"fas fa-sync-alt animate-spin\"></i>\n Live\n
-                </div>\n </div>\n </div>\n \n <div class=\"matrix-container\" id=\"stats-container\">\n
-            <!-- Matrix Display -->\n <div class=\"matrix-display\">\n <div class=\"matrix-container\">\n <canvas
-                        id=\"matrix-canvas\" width=\"1052\" height=\"260\"></canvas>\n </div>\n \n
-                <!-- Matrix Controls -->\n <div class=\"matrix-controls\">\n <!-- Navigation Controls -->\n <div
-                        class=\"control-group\">\n <button class=\"control-btn\" id=\"prev-app-btn\" title=\"Previous
-                            App\">\n <i class=\"fas fa-chevron-left\"></i>\n </button>\n <button class=\"control-btn\"
-                            id=\"next-app-btn\" title=\"Next App\">\n <i class=\"fas fa-chevron-right\"></i>\n
-                        </button>\n </div>\n \n <!-- Action Controls -->\n <div class=\"control-group\">\n <button
-                            class=\"control-btn\" id=\"screenshot-btn\" title=\"Take Screenshot\">\n <i class=\"fas
-                                fa-camera\"></i>\n <span>Screenshot</span>\n </button>\n <button class=\"control-btn\"
-                            id=\"record-gif-btn\" title=\"Record GIF\">\n <i class=\"fas fa-video\"></i>\n <span>Record
-                                GIF</span>\n </button>\n <button class=\"control-btn\" id=\"fullscreen-btn\"
-                            title=\"Fullscreen\">\n <i class=\"fas fa-expand\"></i>\n </button>\n </div>\n </div>\n
-            </div>\n </div>\n </div>\n\n <!-- System Information Grid -->\n <div class=\"info-grid animate-fade-in\"
-        style=\"animation-delay: 0.6s;\">\n <!-- Performance Metrics -->\n <div class=\"card\">\n <h3 style=\"display:
-                flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-lg);\">\n <i class=\"fas
-                    fa-tachometer-alt\" style=\"color: var(--primary);\"></i>\n Performance\n </h3>\n \n <div
-                class=\"metrics-list\">\n <div class=\"metric-item\">\n <div class=\"metric-label\">CPU Load</div>\n
-                    <div class=\"metric-value\" id=\"cpu-load\">--</div>\n </div>\n <div class=\"metric-item\">\n <div
-                        class=\"metric-label\">Temperature</div>\n <div class=\"metric-value\" id=\"temperature\">--°C
-                    </div>\n </div>\n <div class=\"metric-item\">\n <div class=\"metric-label\">Refresh Rate</div>\n
-                    <div class=\"metric-value\" id=\"refresh-rate\">60 FPS</div>\n </div>\n </div>\n </div>\n\n
-        <!-- Network Information -->\n <div class=\"card\">\n <h3 style=\"display: flex; align-items: center; gap:
-                var(--space-md); margin-bottom: var(--space-lg);\">\n <i class=\"fas fa-globe\" style=\"color:
-                    var(--secondary);\"></i>\n Network\n </h3>\n \n <div class=\"network-info\">\n <div
-                    class=\"info-item\">\n <div class=\"info-label\">MAC Address</div>\n <div class=\"info-value\"
-                        id=\"mac-address\">--:--:--:--:--:--</div>\n </div>\n <div class=\"info-item\">\n <div
-                        class=\"info-label\">Gateway</div>\n <div class=\"info-value\" id=\"gateway\">--</div>\n </div>
-                \n <div class=\"info-item\">\n <div class=\"info-label\">DNS Server</div>\n <div class=\"info-value\"
-                        id=\"dns-server\">--</div>\n </div>\n </div>\n </div>\n\n <!-- Quick Actions -->\n <div
-            class=\"card\">\n <h3 style=\"display: flex; align-items: center; gap: var(--space-md); margin-bottom:
-                var(--space-lg);\">\n <i class=\"fas fa-bolt\" style=\"color: var(--accent);\"></i>\n Quick Actions\n
-            </h3>\n \n <div class=\"actions-grid\">\n <button class=\"action-btn\" id=\"restart-device\">\n <i
-                        class=\"fas fa-redo\"></i>\n <span>Restart</span>\n </button>\n <button class=\"action-btn\"
-                    id=\"clear-display\">\n <i class=\"fas fa-eraser\"></i>\n <span>Clear</span>\n </button>\n <button
-                    class=\"action-btn\" id=\"test-display\">\n <i class=\"fas fa-vial\"></i>\n <span>Test</span>\n
-                </button>\n <button class=\"action-btn\" id=\"backup-settings\">\n <i class=\"fas fa-download\"></i>\n
-                    <span>Backup</span>\n </button>\n </div>\n </div>\n </div>\n\n <!-- Recent Activity Log -->\n <div
-        class=\"card animate-fade-in\" style=\"animation-delay: 0.7s; margin-top: var(--space-2xl);\">\n <div
-            class=\"section-header\">\n <h3 style=\"display: flex; align-items: center; gap: var(--space-md);\">\n <i
-                    class=\"fas fa-history\" style=\"color: var(--info);\"></i>\n Recent Activity\n </h3>\n <button
-                class=\"btn btn-ghost btn-sm\" id=\"clear-log\">\n <i class=\"fas fa-trash\"></i>\n Clear Log\n
-            </button>\n </div>\n \n <div class=\"activity-log\" id=\"activity-log\">\n <div class=\"log-item\">\n <div
-                    class=\"log-time\">2 minutes ago</div>\n <div class=\"log-message\">\n <i class=\"fas fa-wifi
-                        text-success\"></i>\n WiFi connected successfully\n </div>\n </div>\n <div class=\"log-item\">\n
-                <div class=\"log-time\">5 minutes ago</div>\n <div class=\"log-message\">\n <i class=\"fas fa-cog
-                        text-info\"></i>\n Settings updated\n </div>\n </div>\n <div class=\"log-item\">\n <div
-                    class=\"log-time\">1 hour ago</div>\n <div class=\"log-message\">\n <i class=\"fas fa-power-off
-                        text-warning\"></i>\n System started\n </div>\n </div>\n </div>\n </div>\n</div>\n\n<style>
-    \n
+<!-- Modern Dashboard Page -->
+<div class="dashboard-page animate-fade-in">
+    <!-- Page Header -->
+    <div class="dashboard-header">
+        <div>
+            <h1 class="page-title">Dashboard</h1>
+            <p class="page-subtitle">Monitor your AWTRIX3 system status and live display</p>
+        </div>
+        <div class="header-actions">
+            <button class="btn btn-secondary" id="refresh-all">
+                <i class="fas fa-sync-alt"></i>
+                <span>Refresh</span>
+            </button>
+            <div class="connection-indicator glass-effect">
+                <div class="health-indicator"></div>
+                <span>System Online</span>
+            </div>
+        </div>
+    </div>
 
-    /* Dashboard-specific styles */
-    \n.dashboard-page {
-        \n padding: var(--space-xl);
-        \n max-width: var(--content-max-width);
-        \n margin: 0 auto;
-        \n
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+        <!-- RAM Usage Card -->
+        <div class="stat-card animate-fade-in" style="animation-delay: 0.1s">
+            <div class="stat-header">
+                <div class="stat-title">Memory Usage</div>
+                <div class="stat-icon">
+                    <i class="fas fa-memory"></i>
+                </div>
+            </div>
+            <div class="stat-value" id="ram-usage">--</div>
+            <div class="stat-change positive">
+                <i class="fas fa-arrow-up"></i>
+                <span>Available</span>
+            </div>
+            <div class="progress">
+                <div class="progress-bar" id="ram-progress" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Flash Storage Card -->
+        <div class="stat-card animate-fade-in" style="animation-delay: 0.2s">
+            <div class="stat-header">
+                <div class="stat-title">Storage</div>
+                <div class="stat-icon">
+                    <i class="fas fa-hdd"></i>
+                </div>
+            </div>
+            <div class="stat-value" id="flash-usage">--</div>
+            <div class="stat-change">
+                <i class="fas fa-chart-pie"></i>
+                <span>Flash Memory</span>
+            </div>
+            <div class="progress">
+                <div class="progress-bar" id="flash-progress" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- WiFi Signal Card -->
+        <div class="stat-card animate-fade-in" style="animation-delay: 0.3s">
+            <div class="stat-header">
+                <div class="stat-title">WiFi Signal</div>
+                <div class="stat-icon">
+                    <i class="fas fa-wifi"></i>
+                </div>
+            </div>
+            <div class="stat-value" id="wifi-signal">--</div>
+            <div class="stat-change">
+                <i class="fas fa-signal"></i>
+                <span id="wifi-ssid">Not Connected</span>
+            </div>
+            <div class="wifi-details">
+                <small id="wifi-ip" style="color: var(--text-muted);">No IP Address</small>
+            </div>
+        </div>
+
+        <!-- Uptime Card -->
+        <div class="stat-card animate-fade-in" style="animation-delay: 0.4s">
+            <div class="stat-header">
+                <div class="stat-title">System Uptime</div>
+                <div class="stat-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+            </div>
+            <div class="stat-value" id="uptime">--</div>
+            <div class="stat-change positive">
+                <i class="fas fa-arrow-up"></i>
+                <span>Running</span>
+            </div>
+            <div class="uptime-details">
+                <small style="color: var(--text-muted);">Current app: <span id="current-app">--</span></small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Matrix Display Section -->
+    <div class="card hero-card animate-fade-in" style="animation-delay: 0.5s; margin: var(--space-2xl) 0;">
+        <div class="section-header">
+            <h2 style="color: white; margin: 0; display: flex; align-items: center; gap: var(--space-md);">
+                <i class="fas fa-tv"></i>
+                Live Matrix Display
+            </h2>
+            <div class="section-actions">
+                <div class="refresh-badge" style="background: rgba(255, 255, 255, 0.2); color: white;">
+                    <i class="fas fa-sync-alt animate-spin"></i>
+                    Live
+                </div>
+            </div>
+        </div>
+        
+        <div class="matrix-container" id="stats-container">
+            <!-- Matrix Display -->
+            <div class="matrix-display">
+                <div class="matrix-container">
+                    <canvas id="matrix-canvas" width="1052" height="260"></canvas>
+                </div>
+                
+                <!-- Matrix Controls -->
+                <div class="matrix-controls">
+                    <!-- Navigation Controls -->
+                    <div class="control-group">
+                        <button class="control-btn" id="prev-app-btn" title="Previous App">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="control-btn" id="next-app-btn" title="Next App">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Action Controls -->
+                    <div class="control-group">
+                        <button class="control-btn" id="screenshot-btn" title="Take Screenshot">
+                            <i class="fas fa-camera"></i>
+                            <span>Screenshot</span>
+                        </button>
+                        <button class="control-btn" id="record-gif-btn" title="Record GIF">
+                            <i class="fas fa-video"></i>
+                            <span>Record GIF</span>
+                        </button>
+                        <button class="control-btn" id="fullscreen-btn" title="Fullscreen">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Information Grid -->
+    <div class="info-grid animate-fade-in" style="animation-delay: 0.6s;">
+        <!-- Performance Metrics -->
+        <div class="card">
+            <h3 style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-lg);">
+                <i class="fas fa-tachometer-alt" style="color: var(--primary);"></i>
+                Performance
+            </h3>
+            
+            <div class="metrics-list">
+                <div class="metric-item">
+                    <div class="metric-label">CPU Load</div>
+                    <div class="metric-value" id="cpu-load">--</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-label">Temperature</div>
+                    <div class="metric-value" id="temperature">--°C</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-label">Refresh Rate</div>
+                    <div class="metric-value" id="refresh-rate">60 FPS</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Network Information -->
+        <div class="card">
+            <h3 style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-lg);">
+                <i class="fas fa-globe" style="color: var(--secondary);"></i>
+                Network
+            </h3>
+            
+            <div class="network-info">
+                <div class="info-item">
+                    <div class="info-label">MAC Address</div>
+                    <div class="info-value" id="mac-address">--:--:--:--:--:--</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Gateway</div>
+                    <div class="info-value" id="gateway">--</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">DNS Server</div>
+                    <div class="info-value" id="dns-server">--</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card">
+            <h3 style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-lg);">
+                <i class="fas fa-bolt" style="color: var(--accent);"></i>
+                Quick Actions
+            </h3>
+            
+            <div class="actions-grid">
+                <button class="action-btn" id="restart-device">
+                    <i class="fas fa-redo"></i>
+                    <span>Restart</span>
+                </button>
+                <button class="action-btn" id="clear-display">
+                    <i class="fas fa-eraser"></i>
+                    <span>Clear</span>
+                </button>
+                <button class="action-btn" id="test-display">
+                    <i class="fas fa-vial"></i>
+                    <span>Test</span>
+                </button>
+                <button class="action-btn" id="backup-settings">
+                    <i class="fas fa-download"></i>
+                    <span>Backup</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity Log -->
+    <div class="card animate-fade-in" style="animation-delay: 0.7s; margin-top: var(--space-2xl);">
+        <div class="section-header">
+            <h3 style="display: flex; align-items: center; gap: var(--space-md);">
+                <i class="fas fa-history" style="color: var(--info);"></i>
+                Recent Activity
+            </h3>
+            <button class="btn btn-ghost btn-sm" id="clear-log">
+                <i class="fas fa-trash"></i>
+                Clear Log
+            </button>
+        </div>
+        
+        <div class="activity-log" id="activity-log">
+            <div class="log-item">
+                <div class="log-time">2 minutes ago</div>
+                <div class="log-message">
+                    <i class="fas fa-wifi text-success"></i>
+                    WiFi connected successfully
+                </div>
+            </div>
+            <div class="log-item">
+                <div class="log-time">5 minutes ago</div>
+                <div class="log-message">
+                    <i class="fas fa-cog text-info"></i>
+                    Settings updated
+                </div>
+            </div>
+            <div class="log-item">
+                <div class="log-time">1 hour ago</div>
+                <div class="log-message">
+                    <i class="fas fa-power-off text-warning"></i>
+                    System started
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Dashboard-specific styles */
+.dashboard-page {
+    padding: var(--space-xl);
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+}
+
+.connection-indicator {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-lg);
+    border-radius: var(--radius-full);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-xl);
+    margin-bottom: var(--space-2xl);
+}
+
+.metrics-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.metric-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-md);
+    background: var(--glass-bg);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--glass-border);
+}
+
+.metric-label {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.metric-value {
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.network-info,
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.info-item {
+    padding: var(--space-md);
+    background: var(--glass-bg);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--glass-border);
+}
+
+.info-label {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.info-value {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-family: var(--font-mono);
+}
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: var(--space-md);
+}
+
+.action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-lg);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-decoration: none;
+    color: var(--text-secondary);
+}
+
+.action-btn:hover {
+    background: var(--primary);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.action-btn i {
+    font-size: 1.5rem;
+}
+
+.activity-log {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.log-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    padding: var(--space-md) 0;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.log-item:last-child {
+    border-bottom: none;
+}
+
+.log-time {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    min-width: 100px;
+}
+
+.log-message {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    color: var(--text-secondary);
+}
+
+.text-success { color: var(--success) !important; }
+.text-info { color: var(--info) !important; }
+.text-warning { color: var(--warning) !important; }
+.text-danger { color: var(--danger) !important; }
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .dashboard-page {
+        padding: var(--space-lg);
     }
-
-    \n\n.header-actions {
-        \n display: flex;
-        \n align-items: center;
-        \n gap: var(--space-lg);
-        \n
+    
+    .dashboard-header {
+        flex-direction: column;
+        gap: var(--space-lg);
+        text-align: center;
     }
-
-    \n\n.connection-indicator {
-        \n display: flex;
-        \n align-items: center;
-        \n gap: var(--space-sm);
-        \n padding: var(--space-sm) var(--space-lg);
-        \n border-radius: var(--radius-full);
-        \n font-size: 0.875rem;
-        \n font-weight: 500;
-        \n
+    
+    .header-actions {
+        flex-direction: column;
+        width: 100%;
     }
-
-    \n\n.info-grid {
-        \n display: grid;
-        \n grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        \n gap: var(--space-xl);
-        \n margin-bottom: var(--space-2xl);
-        \n
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
     }
-
-    \n\n.metrics-list {
-        \n display: flex;
-        \n flex-direction: column;
-        \n gap: var(--space-lg);
-        \n
+    
+    .info-grid {
+        grid-template-columns: 1fr;
     }
-
-    \n\n.metric-item {
-        \n display: flex;
-        \n justify-content: space-between;
-        \n align-items: center;
-        \n padding: var(--space-md);
-        \n background: var(--glass-bg);
-        \n border-radius: var(--radius-lg);
-        \n border: 1px solid var(--glass-border);
-        \n
+    
+    .actions-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
+}
 
-    \n\n.metric-label {
-        \n color: var(--text-secondary);
-        \n font-weight: 500;
-        \n
+@media (max-width: 480px) {
+    .actions-grid {
+        grid-template-columns: 1fr;
     }
-
-    \n\n.metric-value {
-        \n font-weight: 700;
-        \n color: var(--text-primary);
-        \n
+    
+    .matrix-controls {
+        flex-direction: column;
+        gap: var(--space-md);
     }
-
-    \n\n.network-info,
-    \n.info-item {
-        \n display: flex;
-        \n flex-direction: column;
-        \n gap: var(--space-md);
-        \n
+    
+    .control-group {
+        width: 100%;
+        justify-content: center;
     }
-
-    \n\n.info-item {
-        \n padding: var(--space-md);
-        \n background: var(--glass-bg);
-        \n border-radius: var(--radius-lg);
-        \n border: 1px solid var(--glass-border);
-        \n
-    }
-
-    \n\n.info-label {
-        \n color: var(--text-muted);
-        \n font-size: 0.875rem;
-        \n font-weight: 500;
-        \n
-    }
-
-    \n\n.info-value {
-        \n color: var(--text-primary);
-        \n font-weight: 600;
-        \n font-family: var(--font-mono);
-        \n
-    }
-
-    \n\n.actions-grid {
-        \n display: grid;
-        \n grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-        \n gap: var(--space-md);
-        \n
-    }
-
-    \n\n.action-btn {
-        \n display: flex;
-        \n flex-direction: column;
-        \n align-items: center;
-        \n gap: var(--space-sm);
-        \n padding: var(--space-lg);
-        \n background: var(--glass-bg);
-        \n border: 1px solid var(--glass-border);
-        \n border-radius: var(--radius-lg);
-        \n cursor: pointer;
-        \n transition: all var(--transition-fast);
-        \n text-decoration: none;
-        \n color: var(--text-secondary);
-        \n
-    }
-
-    \n\n.action-btn:hover {
-        \n background: var(--primary);
-        \n color: white;
-        \n transform: translateY(-2px);
-        \n box-shadow: var(--shadow-lg);
-        \n
-    }
-
-    \n\n.action-btn i {
-        \n font-size: 1.5rem;
-        \n
-    }
-
-    \n\n.activity-log {
-        \n max-height: 300px;
-        \n overflow-y: auto;
-        \n
-    }
-
-    \n\n.log-item {
-        \n display: flex;
-        \n align-items: center;
-        \n gap: var(--space-lg);
-        \n padding: var(--space-md) 0;
-        \n border-bottom: 1px solid var(--glass-border);
-        \n
-    }
-
-    \n\n.log-item:last-child {
-        \n border-bottom: none;
-        \n
-    }
-
-    \n\n.log-time {
-        \n font-size: 0.875rem;
-        \n color: var(--text-muted);
-        \n white-space: nowrap;
-        \n min-width: 100px;
-        \n
-    }
-
-    \n\n.log-message {
-        \n display: flex;
-        \n align-items: center;
-        \n gap: var(--space-sm);
-        \n color: var(--text-secondary);
-        \n
-    }
-
-    \n\n.text-success {
-        color: var(--success) !important;
-    }
-
-    \n.text-info {
-        color: var(--info) !important;
-    }
-
-    \n.text-warning {
-        color: var(--warning) !important;
-    }
-
-    \n.text-danger {
-        color: var(--danger) !important;
-    }
-
-    \n\n
-    /* Responsive Adjustments */
-    \n@media (max-width: 768px) {
-        \n .dashboard-page {
-            \n padding: var(--space-lg);
-            \n
-        }
-
-        \n \n .dashboard-header {
-            \n flex-direction: column;
-            \n gap: var(--space-lg);
-            \n text-align: center;
-            \n
-        }
-
-        \n \n .header-actions {
-            \n flex-direction: column;
-            \n width: 100%;
-            \n
-        }
-
-        \n \n .stats-grid {
-            \n grid-template-columns: 1fr;
-            \n
-        }
-
-        \n \n .info-grid {
-            \n grid-template-columns: 1fr;
-            \n
-        }
-
-        \n \n .actions-grid {
-            \n grid-template-columns: repeat(2, 1fr);
-            \n
-        }
-
-        \n
-    }
-
-    \n\n@media (max-width: 480px) {
-        \n .actions-grid {
-            \n grid-template-columns: 1fr;
-            \n
-        }
-
-        \n \n .matrix-controls {
-            \n flex-direction: column;
-            \n gap: var(--space-md);
-            \n
-        }
-
-        \n \n .control-group {
-            \n width: 100%;
-            \n justify-content: center;
-            \n
-        }
-
-        \n
-    }
-
-    \n
-</style>"
+}
+</style>
