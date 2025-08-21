@@ -6,7 +6,8 @@
 
 import { CONFIG } from './config.js';
 import { URLManager } from './utils.js';
-import { eventManager, NavigationManager } from './event-manager.js';
+import { eventManager } from './event-manager.js';
+import { NavigationManager } from './navigation-manager.js';
 import { errorHandler } from './error-handler.js';
 import { toastSystem } from './ui-components.js';
 import { themeManager } from './theme-manager.js';
@@ -38,6 +39,7 @@ class AWTRIX3App {
       
       // Load initial page
       await NavigationManager.loadPage('dashboard');
+      this.currentPage = 'dashboard';
       
       this.initialized = true;
       console.info('AWTRIX3 App initialized successfully');
