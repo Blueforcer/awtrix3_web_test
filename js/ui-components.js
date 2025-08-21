@@ -558,7 +558,7 @@ export class ProgressBar {
       animated: true,
       striped: false,
       variant: 'primary',
-      height = '1rem',
+      height: '1rem',
       showLabel: true,
       ...options
     };
